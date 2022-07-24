@@ -8333,7 +8333,7 @@ class SftpClient {
         encoding: 'utf8',
         withFileTypes: true,
       });
-      if (options?.filter) {
+      if (options && options.filter) {
         dirEntries = dirEntries.filter((item) =>
           options.filter(join(srcDir, item.name), item.isDirectory())
         );
@@ -8345,7 +8345,7 @@ class SftpClient {
         if (e.isDirectory()) {
           await this.uploadDir(newSrc, newDst, options);
         } else if (e.isFile()) {
-          if (options?.useFastput) {
+          if (options && options.useFastput) {
             fileUploads.push(this._fastPut(newSrc, newDst));
           } else {
             fileUploads.push(this._put(newSrc, newDst));
@@ -8398,7 +8398,7 @@ class SftpClient {
   async _downloadDir(srcDir, dstDir, options) {
     try {
       let fileList = await this._list(srcDir);
-      if (options?.filter) {
+      if (options && options.filter) {
         fileList = fileList.filter((item) =>
           options.filter(
             `${srcDir}${this.remotePathSep}${item.name}`,
@@ -8429,7 +8429,7 @@ class SftpClient {
         if (f.type === 'd') {
           await this._downloadDir(newSrc, newDst, options);
         } else if (f.type === '-') {
-          if (options?.useFasget) {
+          if (options && options.useFasget) {
             downloadFiles.push(this._fastGet(newSrc, newDst));
           } else {
             downloadFiles.push(this._get(newSrc, newDst));

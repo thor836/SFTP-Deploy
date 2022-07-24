@@ -9,20 +9,10 @@ const host = core.getInput('host');
 const port = parseInt(core.getInput('port'));
 const username = core.getInput('username');
 const password = core.getInput('password');
-const agent = core.getInput('agent');
-const privateKeyIsFile = core.getInput('privateKeyIsFile');
-const passphrase = core.getInput('passphrase');
-
-var privateKey = core.getInput('privateKey');
 
 core.setSecret(password);
 if (passphrase != undefined) {
     core.setSecret(passphrase);
-}
-
-if (privateKeyIsFile == "true") {
-    var privateKey = fs.readFileSync(privateKey);
-    core.setSecret(privateKey);
 }
 
 const localPath = core.getInput('localPath');
@@ -33,9 +23,6 @@ sftp.connect({
     port: port,
     username: username,
     password: password,
-    agent: agent,
-    privateKey: privateKey,
-    passphrase: passphrase,
     readyTimeout: 99999  
 }).then(async () => {
     console.log("Connection established.");

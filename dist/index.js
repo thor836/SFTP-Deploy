@@ -1,22 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 6447:
-/***/ ((module) => {
-
-"use strict";
-module.exports = {"i8":"1.5.0"};
-
-/***/ }),
-
-/***/ 4582:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-module.exports = require(__nccwpck_require__.ab + "lib/protocol/crypto/build/Release/sshcrypto.node")
-
-/***/ }),
-
-/***/ 5604:
+/***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -42,8 +27,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.issue = exports.issueCommand = void 0;
-const os = __importStar(__nccwpck_require__(2087));
-const utils_1 = __nccwpck_require__(1245);
+const os = __importStar(__nccwpck_require__(2037));
+const utils_1 = __nccwpck_require__(5278);
 /**
  * Commands
  *
@@ -115,7 +100,7 @@ function escapeProperty(s) {
 
 /***/ }),
 
-/***/ 5127:
+/***/ 2186:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -149,12 +134,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
-const command_1 = __nccwpck_require__(5604);
-const file_command_1 = __nccwpck_require__(7352);
-const utils_1 = __nccwpck_require__(1245);
-const os = __importStar(__nccwpck_require__(2087));
-const path = __importStar(__nccwpck_require__(5622));
+exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+const command_1 = __nccwpck_require__(7351);
+const file_command_1 = __nccwpck_require__(717);
+const utils_1 = __nccwpck_require__(5278);
+const os = __importStar(__nccwpck_require__(2037));
+const path = __importStar(__nccwpck_require__(1017));
+const oidc_utils_1 = __nccwpck_require__(8041);
 /**
  * The code to exit an action
  */
@@ -423,11 +409,34 @@ function getState(name) {
     return process.env[`STATE_${name}`] || '';
 }
 exports.getState = getState;
+function getIDToken(aud) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield oidc_utils_1.OidcClient.getIDToken(aud);
+    });
+}
+exports.getIDToken = getIDToken;
+/**
+ * Summary exports
+ */
+var summary_1 = __nccwpck_require__(1327);
+Object.defineProperty(exports, "summary", ({ enumerable: true, get: function () { return summary_1.summary; } }));
+/**
+ * @deprecated use core.summary
+ */
+var summary_2 = __nccwpck_require__(1327);
+Object.defineProperty(exports, "markdownSummary", ({ enumerable: true, get: function () { return summary_2.markdownSummary; } }));
+/**
+ * Path exports
+ */
+var path_utils_1 = __nccwpck_require__(2981);
+Object.defineProperty(exports, "toPosixPath", ({ enumerable: true, get: function () { return path_utils_1.toPosixPath; } }));
+Object.defineProperty(exports, "toWin32Path", ({ enumerable: true, get: function () { return path_utils_1.toWin32Path; } }));
+Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: function () { return path_utils_1.toPlatformPath; } }));
 //# sourceMappingURL=core.js.map
 
 /***/ }),
 
-/***/ 7352:
+/***/ 717:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -456,9 +465,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.issueCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__nccwpck_require__(5747));
-const os = __importStar(__nccwpck_require__(2087));
-const utils_1 = __nccwpck_require__(1245);
+const fs = __importStar(__nccwpck_require__(7147));
+const os = __importStar(__nccwpck_require__(2037));
+const utils_1 = __nccwpck_require__(5278);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -476,7 +485,446 @@ exports.issueCommand = issueCommand;
 
 /***/ }),
 
-/***/ 1245:
+/***/ 8041:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OidcClient = void 0;
+const http_client_1 = __nccwpck_require__(6255);
+const auth_1 = __nccwpck_require__(5526);
+const core_1 = __nccwpck_require__(2186);
+class OidcClient {
+    static createHttpClient(allowRetry = true, maxRetry = 10) {
+        const requestOptions = {
+            allowRetries: allowRetry,
+            maxRetries: maxRetry
+        };
+        return new http_client_1.HttpClient('actions/oidc-client', [new auth_1.BearerCredentialHandler(OidcClient.getRequestToken())], requestOptions);
+    }
+    static getRequestToken() {
+        const token = process.env['ACTIONS_ID_TOKEN_REQUEST_TOKEN'];
+        if (!token) {
+            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_TOKEN env variable');
+        }
+        return token;
+    }
+    static getIDTokenUrl() {
+        const runtimeUrl = process.env['ACTIONS_ID_TOKEN_REQUEST_URL'];
+        if (!runtimeUrl) {
+            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable');
+        }
+        return runtimeUrl;
+    }
+    static getCall(id_token_url) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const httpclient = OidcClient.createHttpClient();
+            const res = yield httpclient
+                .getJson(id_token_url)
+                .catch(error => {
+                throw new Error(`Failed to get ID Token. \n 
+        Error Code : ${error.statusCode}\n 
+        Error Message: ${error.result.message}`);
+            });
+            const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
+            if (!id_token) {
+                throw new Error('Response json body do not have ID Token field');
+            }
+            return id_token;
+        });
+    }
+    static getIDToken(audience) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // New ID Token is requested from action service
+                let id_token_url = OidcClient.getIDTokenUrl();
+                if (audience) {
+                    const encodedAudience = encodeURIComponent(audience);
+                    id_token_url = `${id_token_url}&audience=${encodedAudience}`;
+                }
+                core_1.debug(`ID token url is ${id_token_url}`);
+                const id_token = yield OidcClient.getCall(id_token_url);
+                core_1.setSecret(id_token);
+                return id_token;
+            }
+            catch (error) {
+                throw new Error(`Error message: ${error.message}`);
+            }
+        });
+    }
+}
+exports.OidcClient = OidcClient;
+//# sourceMappingURL=oidc-utils.js.map
+
+/***/ }),
+
+/***/ 2981:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = void 0;
+const path = __importStar(__nccwpck_require__(1017));
+/**
+ * toPosixPath converts the given path to the posix form. On Windows, \\ will be
+ * replaced with /.
+ *
+ * @param pth. Path to transform.
+ * @return string Posix path.
+ */
+function toPosixPath(pth) {
+    return pth.replace(/[\\]/g, '/');
+}
+exports.toPosixPath = toPosixPath;
+/**
+ * toWin32Path converts the given path to the win32 form. On Linux, / will be
+ * replaced with \\.
+ *
+ * @param pth. Path to transform.
+ * @return string Win32 path.
+ */
+function toWin32Path(pth) {
+    return pth.replace(/[/]/g, '\\');
+}
+exports.toWin32Path = toWin32Path;
+/**
+ * toPlatformPath converts the given path to a platform-specific path. It does
+ * this by replacing instances of / and \ with the platform-specific path
+ * separator.
+ *
+ * @param pth The path to platformize.
+ * @return string The platform-specific path.
+ */
+function toPlatformPath(pth) {
+    return pth.replace(/[/\\]/g, path.sep);
+}
+exports.toPlatformPath = toPlatformPath;
+//# sourceMappingURL=path-utils.js.map
+
+/***/ }),
+
+/***/ 1327:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
+const os_1 = __nccwpck_require__(2037);
+const fs_1 = __nccwpck_require__(7147);
+const { access, appendFile, writeFile } = fs_1.promises;
+exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
+exports.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
+class Summary {
+    constructor() {
+        this._buffer = '';
+    }
+    /**
+     * Finds the summary file path from the environment, rejects if env var is not found or file does not exist
+     * Also checks r/w permissions.
+     *
+     * @returns step summary file path
+     */
+    filePath() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this._filePath) {
+                return this._filePath;
+            }
+            const pathFromEnv = process.env[exports.SUMMARY_ENV_VAR];
+            if (!pathFromEnv) {
+                throw new Error(`Unable to find environment variable for $${exports.SUMMARY_ENV_VAR}. Check if your runtime environment supports job summaries.`);
+            }
+            try {
+                yield access(pathFromEnv, fs_1.constants.R_OK | fs_1.constants.W_OK);
+            }
+            catch (_a) {
+                throw new Error(`Unable to access summary file: '${pathFromEnv}'. Check if the file has correct read/write permissions.`);
+            }
+            this._filePath = pathFromEnv;
+            return this._filePath;
+        });
+    }
+    /**
+     * Wraps content in an HTML tag, adding any HTML attributes
+     *
+     * @param {string} tag HTML tag to wrap
+     * @param {string | null} content content within the tag
+     * @param {[attribute: string]: string} attrs key-value list of HTML attributes to add
+     *
+     * @returns {string} content wrapped in HTML element
+     */
+    wrap(tag, content, attrs = {}) {
+        const htmlAttrs = Object.entries(attrs)
+            .map(([key, value]) => ` ${key}="${value}"`)
+            .join('');
+        if (!content) {
+            return `<${tag}${htmlAttrs}>`;
+        }
+        return `<${tag}${htmlAttrs}>${content}</${tag}>`;
+    }
+    /**
+     * Writes text in the buffer to the summary buffer file and empties buffer. Will append by default.
+     *
+     * @param {SummaryWriteOptions} [options] (optional) options for write operation
+     *
+     * @returns {Promise<Summary>} summary instance
+     */
+    write(options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const overwrite = !!(options === null || options === void 0 ? void 0 : options.overwrite);
+            const filePath = yield this.filePath();
+            const writeFunc = overwrite ? writeFile : appendFile;
+            yield writeFunc(filePath, this._buffer, { encoding: 'utf8' });
+            return this.emptyBuffer();
+        });
+    }
+    /**
+     * Clears the summary buffer and wipes the summary file
+     *
+     * @returns {Summary} summary instance
+     */
+    clear() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.emptyBuffer().write({ overwrite: true });
+        });
+    }
+    /**
+     * Returns the current summary buffer as a string
+     *
+     * @returns {string} string of summary buffer
+     */
+    stringify() {
+        return this._buffer;
+    }
+    /**
+     * If the summary buffer is empty
+     *
+     * @returns {boolen} true if the buffer is empty
+     */
+    isEmptyBuffer() {
+        return this._buffer.length === 0;
+    }
+    /**
+     * Resets the summary buffer without writing to summary file
+     *
+     * @returns {Summary} summary instance
+     */
+    emptyBuffer() {
+        this._buffer = '';
+        return this;
+    }
+    /**
+     * Adds raw text to the summary buffer
+     *
+     * @param {string} text content to add
+     * @param {boolean} [addEOL=false] (optional) append an EOL to the raw text (default: false)
+     *
+     * @returns {Summary} summary instance
+     */
+    addRaw(text, addEOL = false) {
+        this._buffer += text;
+        return addEOL ? this.addEOL() : this;
+    }
+    /**
+     * Adds the operating system-specific end-of-line marker to the buffer
+     *
+     * @returns {Summary} summary instance
+     */
+    addEOL() {
+        return this.addRaw(os_1.EOL);
+    }
+    /**
+     * Adds an HTML codeblock to the summary buffer
+     *
+     * @param {string} code content to render within fenced code block
+     * @param {string} lang (optional) language to syntax highlight code
+     *
+     * @returns {Summary} summary instance
+     */
+    addCodeBlock(code, lang) {
+        const attrs = Object.assign({}, (lang && { lang }));
+        const element = this.wrap('pre', this.wrap('code', code), attrs);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML list to the summary buffer
+     *
+     * @param {string[]} items list of items to render
+     * @param {boolean} [ordered=false] (optional) if the rendered list should be ordered or not (default: false)
+     *
+     * @returns {Summary} summary instance
+     */
+    addList(items, ordered = false) {
+        const tag = ordered ? 'ol' : 'ul';
+        const listItems = items.map(item => this.wrap('li', item)).join('');
+        const element = this.wrap(tag, listItems);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML table to the summary buffer
+     *
+     * @param {SummaryTableCell[]} rows table rows
+     *
+     * @returns {Summary} summary instance
+     */
+    addTable(rows) {
+        const tableBody = rows
+            .map(row => {
+            const cells = row
+                .map(cell => {
+                if (typeof cell === 'string') {
+                    return this.wrap('td', cell);
+                }
+                const { header, data, colspan, rowspan } = cell;
+                const tag = header ? 'th' : 'td';
+                const attrs = Object.assign(Object.assign({}, (colspan && { colspan })), (rowspan && { rowspan }));
+                return this.wrap(tag, data, attrs);
+            })
+                .join('');
+            return this.wrap('tr', cells);
+        })
+            .join('');
+        const element = this.wrap('table', tableBody);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds a collapsable HTML details element to the summary buffer
+     *
+     * @param {string} label text for the closed state
+     * @param {string} content collapsable content
+     *
+     * @returns {Summary} summary instance
+     */
+    addDetails(label, content) {
+        const element = this.wrap('details', this.wrap('summary', label) + content);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML image tag to the summary buffer
+     *
+     * @param {string} src path to the image you to embed
+     * @param {string} alt text description of the image
+     * @param {SummaryImageOptions} options (optional) addition image attributes
+     *
+     * @returns {Summary} summary instance
+     */
+    addImage(src, alt, options) {
+        const { width, height } = options || {};
+        const attrs = Object.assign(Object.assign({}, (width && { width })), (height && { height }));
+        const element = this.wrap('img', null, Object.assign({ src, alt }, attrs));
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML section heading element
+     *
+     * @param {string} text heading text
+     * @param {number | string} [level=1] (optional) the heading level, default: 1
+     *
+     * @returns {Summary} summary instance
+     */
+    addHeading(text, level) {
+        const tag = `h${level}`;
+        const allowedTag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tag)
+            ? tag
+            : 'h1';
+        const element = this.wrap(allowedTag, text);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML thematic break (<hr>) to the summary buffer
+     *
+     * @returns {Summary} summary instance
+     */
+    addSeparator() {
+        const element = this.wrap('hr', null);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML line break (<br>) to the summary buffer
+     *
+     * @returns {Summary} summary instance
+     */
+    addBreak() {
+        const element = this.wrap('br', null);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML blockquote to the summary buffer
+     *
+     * @param {string} text quote text
+     * @param {string} cite (optional) citation url
+     *
+     * @returns {Summary} summary instance
+     */
+    addQuote(text, cite) {
+        const attrs = Object.assign({}, (cite && { cite }));
+        const element = this.wrap('blockquote', text, attrs);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML anchor tag to the summary buffer
+     *
+     * @param {string} text link text/content
+     * @param {string} href hyperlink
+     *
+     * @returns {Summary} summary instance
+     */
+    addLink(text, href) {
+        const element = this.wrap('a', text, { href });
+        return this.addRaw(element).addEOL();
+    }
+}
+const _summary = new Summary();
+/**
+ * @deprecated use `core.summary`
+ */
+exports.markdownSummary = _summary;
+exports.summary = _summary;
+//# sourceMappingURL=summary.js.map
+
+/***/ }),
+
+/***/ 5278:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -511,6 +959,7 @@ function toCommandProperties(annotationProperties) {
     }
     return {
         title: annotationProperties.title,
+        file: annotationProperties.file,
         line: annotationProperties.startLine,
         endLine: annotationProperties.endLine,
         col: annotationProperties.startColumn,
@@ -522,7 +971,775 @@ exports.toCommandProperties = toCommandProperties;
 
 /***/ }),
 
-/***/ 7790:
+/***/ 5526:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PersonalAccessTokenCredentialHandler = exports.BearerCredentialHandler = exports.BasicCredentialHandler = void 0;
+class BasicCredentialHandler {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+    }
+    prepareRequest(options) {
+        if (!options.headers) {
+            throw Error('The request has no headers');
+        }
+        options.headers['Authorization'] = `Basic ${Buffer.from(`${this.username}:${this.password}`).toString('base64')}`;
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication() {
+        return false;
+    }
+    handleAuthentication() {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error('not implemented');
+        });
+    }
+}
+exports.BasicCredentialHandler = BasicCredentialHandler;
+class BearerCredentialHandler {
+    constructor(token) {
+        this.token = token;
+    }
+    // currently implements pre-authorization
+    // TODO: support preAuth = false where it hooks on 401
+    prepareRequest(options) {
+        if (!options.headers) {
+            throw Error('The request has no headers');
+        }
+        options.headers['Authorization'] = `Bearer ${this.token}`;
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication() {
+        return false;
+    }
+    handleAuthentication() {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error('not implemented');
+        });
+    }
+}
+exports.BearerCredentialHandler = BearerCredentialHandler;
+class PersonalAccessTokenCredentialHandler {
+    constructor(token) {
+        this.token = token;
+    }
+    // currently implements pre-authorization
+    // TODO: support preAuth = false where it hooks on 401
+    prepareRequest(options) {
+        if (!options.headers) {
+            throw Error('The request has no headers');
+        }
+        options.headers['Authorization'] = `Basic ${Buffer.from(`PAT:${this.token}`).toString('base64')}`;
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication() {
+        return false;
+    }
+    handleAuthentication() {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error('not implemented');
+        });
+    }
+}
+exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
+//# sourceMappingURL=auth.js.map
+
+/***/ }),
+
+/***/ 6255:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.HttpClient = exports.isHttps = exports.HttpClientResponse = exports.HttpClientError = exports.getProxyUrl = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
+const http = __importStar(__nccwpck_require__(3685));
+const https = __importStar(__nccwpck_require__(5687));
+const pm = __importStar(__nccwpck_require__(9835));
+const tunnel = __importStar(__nccwpck_require__(4294));
+var HttpCodes;
+(function (HttpCodes) {
+    HttpCodes[HttpCodes["OK"] = 200] = "OK";
+    HttpCodes[HttpCodes["MultipleChoices"] = 300] = "MultipleChoices";
+    HttpCodes[HttpCodes["MovedPermanently"] = 301] = "MovedPermanently";
+    HttpCodes[HttpCodes["ResourceMoved"] = 302] = "ResourceMoved";
+    HttpCodes[HttpCodes["SeeOther"] = 303] = "SeeOther";
+    HttpCodes[HttpCodes["NotModified"] = 304] = "NotModified";
+    HttpCodes[HttpCodes["UseProxy"] = 305] = "UseProxy";
+    HttpCodes[HttpCodes["SwitchProxy"] = 306] = "SwitchProxy";
+    HttpCodes[HttpCodes["TemporaryRedirect"] = 307] = "TemporaryRedirect";
+    HttpCodes[HttpCodes["PermanentRedirect"] = 308] = "PermanentRedirect";
+    HttpCodes[HttpCodes["BadRequest"] = 400] = "BadRequest";
+    HttpCodes[HttpCodes["Unauthorized"] = 401] = "Unauthorized";
+    HttpCodes[HttpCodes["PaymentRequired"] = 402] = "PaymentRequired";
+    HttpCodes[HttpCodes["Forbidden"] = 403] = "Forbidden";
+    HttpCodes[HttpCodes["NotFound"] = 404] = "NotFound";
+    HttpCodes[HttpCodes["MethodNotAllowed"] = 405] = "MethodNotAllowed";
+    HttpCodes[HttpCodes["NotAcceptable"] = 406] = "NotAcceptable";
+    HttpCodes[HttpCodes["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
+    HttpCodes[HttpCodes["RequestTimeout"] = 408] = "RequestTimeout";
+    HttpCodes[HttpCodes["Conflict"] = 409] = "Conflict";
+    HttpCodes[HttpCodes["Gone"] = 410] = "Gone";
+    HttpCodes[HttpCodes["TooManyRequests"] = 429] = "TooManyRequests";
+    HttpCodes[HttpCodes["InternalServerError"] = 500] = "InternalServerError";
+    HttpCodes[HttpCodes["NotImplemented"] = 501] = "NotImplemented";
+    HttpCodes[HttpCodes["BadGateway"] = 502] = "BadGateway";
+    HttpCodes[HttpCodes["ServiceUnavailable"] = 503] = "ServiceUnavailable";
+    HttpCodes[HttpCodes["GatewayTimeout"] = 504] = "GatewayTimeout";
+})(HttpCodes = exports.HttpCodes || (exports.HttpCodes = {}));
+var Headers;
+(function (Headers) {
+    Headers["Accept"] = "accept";
+    Headers["ContentType"] = "content-type";
+})(Headers = exports.Headers || (exports.Headers = {}));
+var MediaTypes;
+(function (MediaTypes) {
+    MediaTypes["ApplicationJson"] = "application/json";
+})(MediaTypes = exports.MediaTypes || (exports.MediaTypes = {}));
+/**
+ * Returns the proxy URL, depending upon the supplied url and proxy environment variables.
+ * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
+ */
+function getProxyUrl(serverUrl) {
+    const proxyUrl = pm.getProxyUrl(new URL(serverUrl));
+    return proxyUrl ? proxyUrl.href : '';
+}
+exports.getProxyUrl = getProxyUrl;
+const HttpRedirectCodes = [
+    HttpCodes.MovedPermanently,
+    HttpCodes.ResourceMoved,
+    HttpCodes.SeeOther,
+    HttpCodes.TemporaryRedirect,
+    HttpCodes.PermanentRedirect
+];
+const HttpResponseRetryCodes = [
+    HttpCodes.BadGateway,
+    HttpCodes.ServiceUnavailable,
+    HttpCodes.GatewayTimeout
+];
+const RetryableHttpVerbs = ['OPTIONS', 'GET', 'DELETE', 'HEAD'];
+const ExponentialBackoffCeiling = 10;
+const ExponentialBackoffTimeSlice = 5;
+class HttpClientError extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.name = 'HttpClientError';
+        this.statusCode = statusCode;
+        Object.setPrototypeOf(this, HttpClientError.prototype);
+    }
+}
+exports.HttpClientError = HttpClientError;
+class HttpClientResponse {
+    constructor(message) {
+        this.message = message;
+    }
+    readBody() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+                let output = Buffer.alloc(0);
+                this.message.on('data', (chunk) => {
+                    output = Buffer.concat([output, chunk]);
+                });
+                this.message.on('end', () => {
+                    resolve(output.toString());
+                });
+            }));
+        });
+    }
+}
+exports.HttpClientResponse = HttpClientResponse;
+function isHttps(requestUrl) {
+    const parsedUrl = new URL(requestUrl);
+    return parsedUrl.protocol === 'https:';
+}
+exports.isHttps = isHttps;
+class HttpClient {
+    constructor(userAgent, handlers, requestOptions) {
+        this._ignoreSslError = false;
+        this._allowRedirects = true;
+        this._allowRedirectDowngrade = false;
+        this._maxRedirects = 50;
+        this._allowRetries = false;
+        this._maxRetries = 1;
+        this._keepAlive = false;
+        this._disposed = false;
+        this.userAgent = userAgent;
+        this.handlers = handlers || [];
+        this.requestOptions = requestOptions;
+        if (requestOptions) {
+            if (requestOptions.ignoreSslError != null) {
+                this._ignoreSslError = requestOptions.ignoreSslError;
+            }
+            this._socketTimeout = requestOptions.socketTimeout;
+            if (requestOptions.allowRedirects != null) {
+                this._allowRedirects = requestOptions.allowRedirects;
+            }
+            if (requestOptions.allowRedirectDowngrade != null) {
+                this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade;
+            }
+            if (requestOptions.maxRedirects != null) {
+                this._maxRedirects = Math.max(requestOptions.maxRedirects, 0);
+            }
+            if (requestOptions.keepAlive != null) {
+                this._keepAlive = requestOptions.keepAlive;
+            }
+            if (requestOptions.allowRetries != null) {
+                this._allowRetries = requestOptions.allowRetries;
+            }
+            if (requestOptions.maxRetries != null) {
+                this._maxRetries = requestOptions.maxRetries;
+            }
+        }
+    }
+    options(requestUrl, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('OPTIONS', requestUrl, null, additionalHeaders || {});
+        });
+    }
+    get(requestUrl, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('GET', requestUrl, null, additionalHeaders || {});
+        });
+    }
+    del(requestUrl, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('DELETE', requestUrl, null, additionalHeaders || {});
+        });
+    }
+    post(requestUrl, data, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('POST', requestUrl, data, additionalHeaders || {});
+        });
+    }
+    patch(requestUrl, data, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('PATCH', requestUrl, data, additionalHeaders || {});
+        });
+    }
+    put(requestUrl, data, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('PUT', requestUrl, data, additionalHeaders || {});
+        });
+    }
+    head(requestUrl, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('HEAD', requestUrl, null, additionalHeaders || {});
+        });
+    }
+    sendStream(verb, requestUrl, stream, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request(verb, requestUrl, stream, additionalHeaders);
+        });
+    }
+    /**
+     * Gets a typed object from an endpoint
+     * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
+     */
+    getJson(requestUrl, additionalHeaders = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+            const res = yield this.get(requestUrl, additionalHeaders);
+            return this._processResponse(res, this.requestOptions);
+        });
+    }
+    postJson(requestUrl, obj, additionalHeaders = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = JSON.stringify(obj, null, 2);
+            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            const res = yield this.post(requestUrl, data, additionalHeaders);
+            return this._processResponse(res, this.requestOptions);
+        });
+    }
+    putJson(requestUrl, obj, additionalHeaders = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = JSON.stringify(obj, null, 2);
+            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            const res = yield this.put(requestUrl, data, additionalHeaders);
+            return this._processResponse(res, this.requestOptions);
+        });
+    }
+    patchJson(requestUrl, obj, additionalHeaders = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = JSON.stringify(obj, null, 2);
+            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            const res = yield this.patch(requestUrl, data, additionalHeaders);
+            return this._processResponse(res, this.requestOptions);
+        });
+    }
+    /**
+     * Makes a raw http request.
+     * All other methods such as get, post, patch, and request ultimately call this.
+     * Prefer get, del, post and patch
+     */
+    request(verb, requestUrl, data, headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this._disposed) {
+                throw new Error('Client has already been disposed.');
+            }
+            const parsedUrl = new URL(requestUrl);
+            let info = this._prepareRequest(verb, parsedUrl, headers);
+            // Only perform retries on reads since writes may not be idempotent.
+            const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb)
+                ? this._maxRetries + 1
+                : 1;
+            let numTries = 0;
+            let response;
+            do {
+                response = yield this.requestRaw(info, data);
+                // Check if it's an authentication challenge
+                if (response &&
+                    response.message &&
+                    response.message.statusCode === HttpCodes.Unauthorized) {
+                    let authenticationHandler;
+                    for (const handler of this.handlers) {
+                        if (handler.canHandleAuthentication(response)) {
+                            authenticationHandler = handler;
+                            break;
+                        }
+                    }
+                    if (authenticationHandler) {
+                        return authenticationHandler.handleAuthentication(this, info, data);
+                    }
+                    else {
+                        // We have received an unauthorized response but have no handlers to handle it.
+                        // Let the response return to the caller.
+                        return response;
+                    }
+                }
+                let redirectsRemaining = this._maxRedirects;
+                while (response.message.statusCode &&
+                    HttpRedirectCodes.includes(response.message.statusCode) &&
+                    this._allowRedirects &&
+                    redirectsRemaining > 0) {
+                    const redirectUrl = response.message.headers['location'];
+                    if (!redirectUrl) {
+                        // if there's no location to redirect to, we won't
+                        break;
+                    }
+                    const parsedRedirectUrl = new URL(redirectUrl);
+                    if (parsedUrl.protocol === 'https:' &&
+                        parsedUrl.protocol !== parsedRedirectUrl.protocol &&
+                        !this._allowRedirectDowngrade) {
+                        throw new Error('Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.');
+                    }
+                    // we need to finish reading the response before reassigning response
+                    // which will leak the open socket.
+                    yield response.readBody();
+                    // strip authorization header if redirected to a different hostname
+                    if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
+                        for (const header in headers) {
+                            // header names are case insensitive
+                            if (header.toLowerCase() === 'authorization') {
+                                delete headers[header];
+                            }
+                        }
+                    }
+                    // let's make the request with the new redirectUrl
+                    info = this._prepareRequest(verb, parsedRedirectUrl, headers);
+                    response = yield this.requestRaw(info, data);
+                    redirectsRemaining--;
+                }
+                if (!response.message.statusCode ||
+                    !HttpResponseRetryCodes.includes(response.message.statusCode)) {
+                    // If not a retry code, return immediately instead of retrying
+                    return response;
+                }
+                numTries += 1;
+                if (numTries < maxTries) {
+                    yield response.readBody();
+                    yield this._performExponentialBackoff(numTries);
+                }
+            } while (numTries < maxTries);
+            return response;
+        });
+    }
+    /**
+     * Needs to be called if keepAlive is set to true in request options.
+     */
+    dispose() {
+        if (this._agent) {
+            this._agent.destroy();
+        }
+        this._disposed = true;
+    }
+    /**
+     * Raw request.
+     * @param info
+     * @param data
+     */
+    requestRaw(info, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                function callbackForResult(err, res) {
+                    if (err) {
+                        reject(err);
+                    }
+                    else if (!res) {
+                        // If `err` is not passed, then `res` must be passed.
+                        reject(new Error('Unknown error'));
+                    }
+                    else {
+                        resolve(res);
+                    }
+                }
+                this.requestRawWithCallback(info, data, callbackForResult);
+            });
+        });
+    }
+    /**
+     * Raw request with callback.
+     * @param info
+     * @param data
+     * @param onResult
+     */
+    requestRawWithCallback(info, data, onResult) {
+        if (typeof data === 'string') {
+            if (!info.options.headers) {
+                info.options.headers = {};
+            }
+            info.options.headers['Content-Length'] = Buffer.byteLength(data, 'utf8');
+        }
+        let callbackCalled = false;
+        function handleResult(err, res) {
+            if (!callbackCalled) {
+                callbackCalled = true;
+                onResult(err, res);
+            }
+        }
+        const req = info.httpModule.request(info.options, (msg) => {
+            const res = new HttpClientResponse(msg);
+            handleResult(undefined, res);
+        });
+        let socket;
+        req.on('socket', sock => {
+            socket = sock;
+        });
+        // If we ever get disconnected, we want the socket to timeout eventually
+        req.setTimeout(this._socketTimeout || 3 * 60000, () => {
+            if (socket) {
+                socket.end();
+            }
+            handleResult(new Error(`Request timeout: ${info.options.path}`));
+        });
+        req.on('error', function (err) {
+            // err has statusCode property
+            // res should have headers
+            handleResult(err);
+        });
+        if (data && typeof data === 'string') {
+            req.write(data, 'utf8');
+        }
+        if (data && typeof data !== 'string') {
+            data.on('close', function () {
+                req.end();
+            });
+            data.pipe(req);
+        }
+        else {
+            req.end();
+        }
+    }
+    /**
+     * Gets an http agent. This function is useful when you need an http agent that handles
+     * routing through a proxy server - depending upon the url and proxy environment variables.
+     * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
+     */
+    getAgent(serverUrl) {
+        const parsedUrl = new URL(serverUrl);
+        return this._getAgent(parsedUrl);
+    }
+    _prepareRequest(method, requestUrl, headers) {
+        const info = {};
+        info.parsedUrl = requestUrl;
+        const usingSsl = info.parsedUrl.protocol === 'https:';
+        info.httpModule = usingSsl ? https : http;
+        const defaultPort = usingSsl ? 443 : 80;
+        info.options = {};
+        info.options.host = info.parsedUrl.hostname;
+        info.options.port = info.parsedUrl.port
+            ? parseInt(info.parsedUrl.port)
+            : defaultPort;
+        info.options.path =
+            (info.parsedUrl.pathname || '') + (info.parsedUrl.search || '');
+        info.options.method = method;
+        info.options.headers = this._mergeHeaders(headers);
+        if (this.userAgent != null) {
+            info.options.headers['user-agent'] = this.userAgent;
+        }
+        info.options.agent = this._getAgent(info.parsedUrl);
+        // gives handlers an opportunity to participate
+        if (this.handlers) {
+            for (const handler of this.handlers) {
+                handler.prepareRequest(info.options);
+            }
+        }
+        return info;
+    }
+    _mergeHeaders(headers) {
+        if (this.requestOptions && this.requestOptions.headers) {
+            return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers || {}));
+        }
+        return lowercaseKeys(headers || {});
+    }
+    _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
+        let clientHeader;
+        if (this.requestOptions && this.requestOptions.headers) {
+            clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
+        }
+        return additionalHeaders[header] || clientHeader || _default;
+    }
+    _getAgent(parsedUrl) {
+        let agent;
+        const proxyUrl = pm.getProxyUrl(parsedUrl);
+        const useProxy = proxyUrl && proxyUrl.hostname;
+        if (this._keepAlive && useProxy) {
+            agent = this._proxyAgent;
+        }
+        if (this._keepAlive && !useProxy) {
+            agent = this._agent;
+        }
+        // if agent is already assigned use that agent.
+        if (agent) {
+            return agent;
+        }
+        const usingSsl = parsedUrl.protocol === 'https:';
+        let maxSockets = 100;
+        if (this.requestOptions) {
+            maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
+        }
+        // This is `useProxy` again, but we need to check `proxyURl` directly for TypeScripts's flow analysis.
+        if (proxyUrl && proxyUrl.hostname) {
+            const agentOptions = {
+                maxSockets,
+                keepAlive: this._keepAlive,
+                proxy: Object.assign(Object.assign({}, ((proxyUrl.username || proxyUrl.password) && {
+                    proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
+                })), { host: proxyUrl.hostname, port: proxyUrl.port })
+            };
+            let tunnelAgent;
+            const overHttps = proxyUrl.protocol === 'https:';
+            if (usingSsl) {
+                tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp;
+            }
+            else {
+                tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp;
+            }
+            agent = tunnelAgent(agentOptions);
+            this._proxyAgent = agent;
+        }
+        // if reusing agent across request and tunneling agent isn't assigned create a new agent
+        if (this._keepAlive && !agent) {
+            const options = { keepAlive: this._keepAlive, maxSockets };
+            agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
+            this._agent = agent;
+        }
+        // if not using private agent and tunnel agent isn't setup then use global agent
+        if (!agent) {
+            agent = usingSsl ? https.globalAgent : http.globalAgent;
+        }
+        if (usingSsl && this._ignoreSslError) {
+            // we don't want to set NODE_TLS_REJECT_UNAUTHORIZED=0 since that will affect request for entire process
+            // http.RequestOptions doesn't expose a way to modify RequestOptions.agent.options
+            // we have to cast it to any and change it directly
+            agent.options = Object.assign(agent.options || {}, {
+                rejectUnauthorized: false
+            });
+        }
+        return agent;
+    }
+    _performExponentialBackoff(retryNumber) {
+        return __awaiter(this, void 0, void 0, function* () {
+            retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
+            const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
+            return new Promise(resolve => setTimeout(() => resolve(), ms));
+        });
+    }
+    _processResponse(res, options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                const statusCode = res.message.statusCode || 0;
+                const response = {
+                    statusCode,
+                    result: null,
+                    headers: {}
+                };
+                // not found leads to null obj returned
+                if (statusCode === HttpCodes.NotFound) {
+                    resolve(response);
+                }
+                // get the result from the body
+                function dateTimeDeserializer(key, value) {
+                    if (typeof value === 'string') {
+                        const a = new Date(value);
+                        if (!isNaN(a.valueOf())) {
+                            return a;
+                        }
+                    }
+                    return value;
+                }
+                let obj;
+                let contents;
+                try {
+                    contents = yield res.readBody();
+                    if (contents && contents.length > 0) {
+                        if (options && options.deserializeDates) {
+                            obj = JSON.parse(contents, dateTimeDeserializer);
+                        }
+                        else {
+                            obj = JSON.parse(contents);
+                        }
+                        response.result = obj;
+                    }
+                    response.headers = res.message.headers;
+                }
+                catch (err) {
+                    // Invalid resource (contents not json);  leaving result obj null
+                }
+                // note that 3xx redirects are handled by the http layer.
+                if (statusCode > 299) {
+                    let msg;
+                    // if exception/error in body, attempt to get better error
+                    if (obj && obj.message) {
+                        msg = obj.message;
+                    }
+                    else if (contents && contents.length > 0) {
+                        // it may be the case that the exception is in the body message as string
+                        msg = contents;
+                    }
+                    else {
+                        msg = `Failed request: (${statusCode})`;
+                    }
+                    const err = new HttpClientError(msg, statusCode);
+                    err.result = response.result;
+                    reject(err);
+                }
+                else {
+                    resolve(response);
+                }
+            }));
+        });
+    }
+}
+exports.HttpClient = HttpClient;
+const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 9835:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.checkBypass = exports.getProxyUrl = void 0;
+function getProxyUrl(reqUrl) {
+    const usingSsl = reqUrl.protocol === 'https:';
+    if (checkBypass(reqUrl)) {
+        return undefined;
+    }
+    const proxyVar = (() => {
+        if (usingSsl) {
+            return process.env['https_proxy'] || process.env['HTTPS_PROXY'];
+        }
+        else {
+            return process.env['http_proxy'] || process.env['HTTP_PROXY'];
+        }
+    })();
+    if (proxyVar) {
+        return new URL(proxyVar);
+    }
+    else {
+        return undefined;
+    }
+}
+exports.getProxyUrl = getProxyUrl;
+function checkBypass(reqUrl) {
+    if (!reqUrl.hostname) {
+        return false;
+    }
+    const noProxy = process.env['no_proxy'] || process.env['NO_PROXY'] || '';
+    if (!noProxy) {
+        return false;
+    }
+    // Determine the request port
+    let reqPort;
+    if (reqUrl.port) {
+        reqPort = Number(reqUrl.port);
+    }
+    else if (reqUrl.protocol === 'http:') {
+        reqPort = 80;
+    }
+    else if (reqUrl.protocol === 'https:') {
+        reqPort = 443;
+    }
+    // Format the request hostname and hostname with port
+    const upperReqHosts = [reqUrl.hostname.toUpperCase()];
+    if (typeof reqPort === 'number') {
+        upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
+    }
+    // Compare request host against noproxy
+    for (const upperNoProxyItem of noProxy
+        .split(',')
+        .map(x => x.trim().toUpperCase())
+        .filter(x => x)) {
+        if (upperReqHosts.some(x => x === upperNoProxyItem)) {
+            return true;
+        }
+    }
+    return false;
+}
+exports.checkBypass = checkBypass;
+//# sourceMappingURL=proxy.js.map
+
+/***/ }),
+
+/***/ 9348:
 /***/ ((module) => {
 
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
@@ -542,16 +1759,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ 895:
+/***/ 194:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
-var errors = __nccwpck_require__(7790);
-var types = __nccwpck_require__(3083);
+var errors = __nccwpck_require__(9348);
+var types = __nccwpck_require__(2473);
 
-var Reader = __nccwpck_require__(8737);
-var Writer = __nccwpck_require__(6056);
+var Reader = __nccwpck_require__(290);
+var Writer = __nccwpck_require__(3200);
 
 
 // --- Exports
@@ -576,16 +1793,16 @@ for (var e in errors) {
 
 /***/ }),
 
-/***/ 8737:
+/***/ 290:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
-var assert = __nccwpck_require__(2357);
-var Buffer = __nccwpck_require__(9990).Buffer;
+var assert = __nccwpck_require__(9491);
+var Buffer = (__nccwpck_require__(5118).Buffer);
 
-var ASN1 = __nccwpck_require__(3083);
-var errors = __nccwpck_require__(7790);
+var ASN1 = __nccwpck_require__(2473);
+var errors = __nccwpck_require__(9348);
 
 
 // --- Globals
@@ -845,7 +2062,7 @@ module.exports = Reader;
 
 /***/ }),
 
-/***/ 3083:
+/***/ 2473:
 /***/ ((module) => {
 
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
@@ -888,15 +2105,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6056:
+/***/ 3200:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
-var assert = __nccwpck_require__(2357);
-var Buffer = __nccwpck_require__(9990).Buffer;
-var ASN1 = __nccwpck_require__(3083);
-var errors = __nccwpck_require__(7790);
+var assert = __nccwpck_require__(9491);
+var Buffer = (__nccwpck_require__(5118).Buffer);
+var ASN1 = __nccwpck_require__(2473);
+var errors = __nccwpck_require__(9348);
 
 
 // --- Globals
@@ -1212,7 +2429,7 @@ module.exports = Writer;
 
 /***/ }),
 
-/***/ 6316:
+/***/ 970:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
@@ -1220,7 +2437,7 @@ module.exports = Writer;
 // If you have no idea what ASN.1 or BER is, see this:
 // ftp://ftp.rsa.com/pub/pkcs/ascii/layman.asc
 
-var Ber = __nccwpck_require__(895);
+var Ber = __nccwpck_require__(194);
 
 
 
@@ -1239,13 +2456,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8585:
+/***/ 5447:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var crypto_hash_sha512 = __nccwpck_require__(4245).lowlevel.crypto_hash;
+var crypto_hash_sha512 = (__nccwpck_require__(8729).lowlevel.crypto_hash);
 
 /*
  * This file is a 1:1 port from the OpenBSD blowfish.c and bcrypt_pbkdf.c. As a
@@ -1803,7 +3020,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1246:
+/***/ 3018:
 /***/ ((module) => {
 
 /* eslint-disable node/no-deprecated-api */
@@ -1882,15 +3099,15 @@ module.exports = bufferFrom
 
 /***/ }),
 
-/***/ 743:
+/***/ 5107:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var Writable = __nccwpck_require__(3901).Writable
-var inherits = __nccwpck_require__(2150)
-var bufferFrom = __nccwpck_require__(1246)
+var Writable = (__nccwpck_require__(1642).Writable)
+var inherits = __nccwpck_require__(4124)
+var bufferFrom = __nccwpck_require__(3018)
 
 if (typeof Uint8Array === 'undefined') {
-  var U8 = __nccwpck_require__(3261)/* .Uint8Array */ .U2
+  var U8 = (__nccwpck_require__(5027)/* .Uint8Array */ .U2)
 } else {
   var U8 = Uint8Array
 }
@@ -2033,7 +3250,20 @@ function u8Concat (parts) {
 
 /***/ }),
 
-/***/ 6628:
+/***/ 4137:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+const binding = __nccwpck_require__(4240);
+
+module.exports = binding.getCPUInfo;
+
+
+/***/ }),
+
+/***/ 2997:
 /***/ ((module) => {
 
 "use strict";
@@ -2088,23 +3318,23 @@ module.exports = createError;
 
 /***/ }),
 
-/***/ 2150:
+/***/ 4124:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 try {
-  var util = __nccwpck_require__(1669);
+  var util = __nccwpck_require__(3837);
   /* istanbul ignore next */
   if (typeof util.inherits !== 'function') throw '';
   module.exports = util.inherits;
 } catch (e) {
   /* istanbul ignore next */
-  module.exports = __nccwpck_require__(8531);
+  module.exports = __nccwpck_require__(8544);
 }
 
 
 /***/ }),
 
-/***/ 8531:
+/***/ 8544:
 /***/ ((module) => {
 
 if (typeof Object.create === 'function') {
@@ -2138,14 +3368,14 @@ if (typeof Object.create === 'function') {
 
 /***/ }),
 
-/***/ 9360:
+/***/ 4742:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var errcode = __nccwpck_require__(6628);
-var retry = __nccwpck_require__(1128);
+var errcode = __nccwpck_require__(2997);
+var retry = __nccwpck_require__(4347);
 
 var hasOwn = Object.prototype.hasOwnProperty;
 
@@ -2198,7 +3428,7 @@ module.exports = promiseRetry;
 
 /***/ }),
 
-/***/ 583:
+/***/ 7214:
 /***/ ((module) => {
 
 "use strict";
@@ -2322,7 +3552,7 @@ module.exports.q = codes;
 
 /***/ }),
 
-/***/ 914:
+/***/ 1359:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2367,11 +3597,11 @@ var objectKeys = Object.keys || function (obj) {
 
 module.exports = Duplex;
 
-var Readable = __nccwpck_require__(7640);
+var Readable = __nccwpck_require__(1433);
 
-var Writable = __nccwpck_require__(8549);
+var Writable = __nccwpck_require__(6993);
 
-__nccwpck_require__(2150)(Duplex, Readable);
+__nccwpck_require__(4124)(Duplex, Readable);
 
 {
   // Allow the keys array to be GC'ed.
@@ -2468,7 +3698,7 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 
 /***/ }),
 
-/***/ 5140:
+/***/ 1542:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2499,9 +3729,9 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
 
 module.exports = PassThrough;
 
-var Transform = __nccwpck_require__(576);
+var Transform = __nccwpck_require__(4415);
 
-__nccwpck_require__(2150)(PassThrough, Transform);
+__nccwpck_require__(4124)(PassThrough, Transform);
 
 function PassThrough(options) {
   if (!(this instanceof PassThrough)) return new PassThrough(options);
@@ -2514,7 +3744,7 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 
 /***/ }),
 
-/***/ 7640:
+/***/ 1433:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2549,7 +3779,7 @@ var Duplex;
 Readable.ReadableState = ReadableState;
 /*<replacement>*/
 
-var EE = __nccwpck_require__(8614).EventEmitter;
+var EE = (__nccwpck_require__(2361).EventEmitter);
 
 var EElistenerCount = function EElistenerCount(emitter, type) {
   return emitter.listeners(type).length;
@@ -2559,11 +3789,11 @@ var EElistenerCount = function EElistenerCount(emitter, type) {
 /*<replacement>*/
 
 
-var Stream = __nccwpck_require__(6268);
+var Stream = __nccwpck_require__(2387);
 /*</replacement>*/
 
 
-var Buffer = __nccwpck_require__(4293).Buffer;
+var Buffer = (__nccwpck_require__(4300).Buffer);
 
 var OurUint8Array = global.Uint8Array || function () {};
 
@@ -2577,7 +3807,7 @@ function _isUint8Array(obj) {
 /*<replacement>*/
 
 
-var debugUtil = __nccwpck_require__(1669);
+var debugUtil = __nccwpck_require__(3837);
 
 var debug;
 
@@ -2589,14 +3819,14 @@ if (debugUtil && debugUtil.debuglog) {
 /*</replacement>*/
 
 
-var BufferList = __nccwpck_require__(2726);
+var BufferList = __nccwpck_require__(2746);
 
-var destroyImpl = __nccwpck_require__(64);
+var destroyImpl = __nccwpck_require__(7049);
 
-var _require = __nccwpck_require__(3813),
+var _require = __nccwpck_require__(9948),
     getHighWaterMark = _require.getHighWaterMark;
 
-var _require$codes = __nccwpck_require__(583)/* .codes */ .q,
+var _require$codes = (__nccwpck_require__(7214)/* .codes */ .q),
     ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
     ERR_STREAM_PUSH_AFTER_EOF = _require$codes.ERR_STREAM_PUSH_AFTER_EOF,
     ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
@@ -2607,7 +3837,7 @@ var StringDecoder;
 var createReadableStreamAsyncIterator;
 var from;
 
-__nccwpck_require__(2150)(Readable, Stream);
+__nccwpck_require__(4124)(Readable, Stream);
 
 var errorOrDestroy = destroyImpl.errorOrDestroy;
 var kProxyEvents = ['error', 'close', 'destroy', 'pause', 'resume'];
@@ -2624,7 +3854,7 @@ function prependListener(emitter, event, fn) {
 }
 
 function ReadableState(options, stream, isDuplex) {
-  Duplex = Duplex || __nccwpck_require__(914);
+  Duplex = Duplex || __nccwpck_require__(1359);
   options = options || {}; // Duplex streams are both readable and writable, but share
   // the same options object.
   // However, some cases require setting options to different
@@ -2680,14 +3910,14 @@ function ReadableState(options, stream, isDuplex) {
   this.encoding = null;
 
   if (options.encoding) {
-    if (!StringDecoder) StringDecoder = __nccwpck_require__(7734)/* .StringDecoder */ .s;
+    if (!StringDecoder) StringDecoder = (__nccwpck_require__(4841)/* .StringDecoder */ .s);
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
 }
 
 function Readable(options) {
-  Duplex = Duplex || __nccwpck_require__(914);
+  Duplex = Duplex || __nccwpck_require__(1359);
   if (!(this instanceof Readable)) return new Readable(options); // Checking for a Stream.Duplex instance is faster here instead of inside
   // the ReadableState constructor, at least with V8 6.5
 
@@ -2842,7 +4072,7 @@ Readable.prototype.isPaused = function () {
 
 
 Readable.prototype.setEncoding = function (enc) {
-  if (!StringDecoder) StringDecoder = __nccwpck_require__(7734)/* .StringDecoder */ .s;
+  if (!StringDecoder) StringDecoder = (__nccwpck_require__(4841)/* .StringDecoder */ .s);
   var decoder = new StringDecoder(enc);
   this._readableState.decoder = decoder; // If setEncoding(null), decoder.encoding equals utf8
 
@@ -3526,7 +4756,7 @@ Readable.prototype.wrap = function (stream) {
 if (typeof Symbol === 'function') {
   Readable.prototype[Symbol.asyncIterator] = function () {
     if (createReadableStreamAsyncIterator === undefined) {
-      createReadableStreamAsyncIterator = __nccwpck_require__(5229);
+      createReadableStreamAsyncIterator = __nccwpck_require__(3306);
     }
 
     return createReadableStreamAsyncIterator(this);
@@ -3628,7 +4858,7 @@ function endReadableNT(state, stream) {
 if (typeof Symbol === 'function') {
   Readable.from = function (iterable, opts) {
     if (from === undefined) {
-      from = __nccwpck_require__(169);
+      from = __nccwpck_require__(9082);
     }
 
     return from(Readable, iterable, opts);
@@ -3645,7 +4875,7 @@ function indexOf(xs, x) {
 
 /***/ }),
 
-/***/ 576:
+/***/ 4415:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -3714,15 +4944,15 @@ function indexOf(xs, x) {
 
 module.exports = Transform;
 
-var _require$codes = __nccwpck_require__(583)/* .codes */ .q,
+var _require$codes = (__nccwpck_require__(7214)/* .codes */ .q),
     ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
     ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
     ERR_TRANSFORM_ALREADY_TRANSFORMING = _require$codes.ERR_TRANSFORM_ALREADY_TRANSFORMING,
     ERR_TRANSFORM_WITH_LENGTH_0 = _require$codes.ERR_TRANSFORM_WITH_LENGTH_0;
 
-var Duplex = __nccwpck_require__(914);
+var Duplex = __nccwpck_require__(1359);
 
-__nccwpck_require__(2150)(Transform, Duplex);
+__nccwpck_require__(4124)(Transform, Duplex);
 
 function afterTransform(er, data) {
   var ts = this._transformState;
@@ -3853,7 +5083,7 @@ function done(stream, er, data) {
 
 /***/ }),
 
-/***/ 8549:
+/***/ 6993:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -3916,17 +5146,17 @@ Writable.WritableState = WritableState;
 /*<replacement>*/
 
 var internalUtil = {
-  deprecate: __nccwpck_require__(5362)
+  deprecate: __nccwpck_require__(7127)
 };
 /*</replacement>*/
 
 /*<replacement>*/
 
-var Stream = __nccwpck_require__(6268);
+var Stream = __nccwpck_require__(2387);
 /*</replacement>*/
 
 
-var Buffer = __nccwpck_require__(4293).Buffer;
+var Buffer = (__nccwpck_require__(4300).Buffer);
 
 var OurUint8Array = global.Uint8Array || function () {};
 
@@ -3938,12 +5168,12 @@ function _isUint8Array(obj) {
   return Buffer.isBuffer(obj) || obj instanceof OurUint8Array;
 }
 
-var destroyImpl = __nccwpck_require__(64);
+var destroyImpl = __nccwpck_require__(7049);
 
-var _require = __nccwpck_require__(3813),
+var _require = __nccwpck_require__(9948),
     getHighWaterMark = _require.getHighWaterMark;
 
-var _require$codes = __nccwpck_require__(583)/* .codes */ .q,
+var _require$codes = (__nccwpck_require__(7214)/* .codes */ .q),
     ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
     ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
     ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
@@ -3955,12 +5185,12 @@ var _require$codes = __nccwpck_require__(583)/* .codes */ .q,
 
 var errorOrDestroy = destroyImpl.errorOrDestroy;
 
-__nccwpck_require__(2150)(Writable, Stream);
+__nccwpck_require__(4124)(Writable, Stream);
 
 function nop() {}
 
 function WritableState(options, stream, isDuplex) {
-  Duplex = Duplex || __nccwpck_require__(914);
+  Duplex = Duplex || __nccwpck_require__(1359);
   options = options || {}; // Duplex streams are both readable and writable, but share
   // the same options object.
   // However, some cases require setting options to different
@@ -4086,7 +5316,7 @@ if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.protot
 }
 
 function Writable(options) {
-  Duplex = Duplex || __nccwpck_require__(914); // Writable ctor is applied to Duplexes, too.
+  Duplex = Duplex || __nccwpck_require__(1359); // Writable ctor is applied to Duplexes, too.
   // `realHasInstance` is necessary because using plain `instanceof`
   // would return false, as no `_writableState` property is attached.
   // Trying to use the custom `instanceof` for Writable here will also break the
@@ -4557,7 +5787,7 @@ Writable.prototype._destroy = function (err, cb) {
 
 /***/ }),
 
-/***/ 5229:
+/***/ 3306:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -4567,7 +5797,7 @@ var _Object$setPrototypeO;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var finished = __nccwpck_require__(1604);
+var finished = __nccwpck_require__(6080);
 
 var kLastResolve = Symbol('lastResolve');
 var kLastReject = Symbol('lastReject');
@@ -4771,7 +6001,7 @@ module.exports = createReadableStreamAsyncIterator;
 
 /***/ }),
 
-/***/ 2726:
+/***/ 2746:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -4789,10 +6019,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var _require = __nccwpck_require__(4293),
+var _require = __nccwpck_require__(4300),
     Buffer = _require.Buffer;
 
-var _require2 = __nccwpck_require__(1669),
+var _require2 = __nccwpck_require__(3837),
     inspect = _require2.inspect;
 
 var custom = inspect && inspect.custom || 'inspect';
@@ -4988,7 +6218,7 @@ function () {
 
 /***/ }),
 
-/***/ 64:
+/***/ 7049:
 /***/ ((module) => {
 
 "use strict";
@@ -5100,7 +6330,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1604:
+/***/ 6080:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -5108,7 +6338,7 @@ module.exports = {
 // permission from the author, Mathias Buus (@mafintosh).
 
 
-var ERR_STREAM_PREMATURE_CLOSE = __nccwpck_require__(583)/* .codes.ERR_STREAM_PREMATURE_CLOSE */ .q.ERR_STREAM_PREMATURE_CLOSE;
+var ERR_STREAM_PREMATURE_CLOSE = (__nccwpck_require__(7214)/* .codes.ERR_STREAM_PREMATURE_CLOSE */ .q.ERR_STREAM_PREMATURE_CLOSE);
 
 function once(callback) {
   var called = false;
@@ -5211,7 +6441,7 @@ module.exports = eos;
 
 /***/ }),
 
-/***/ 169:
+/***/ 9082:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -5227,7 +6457,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var ERR_INVALID_ARG_TYPE = __nccwpck_require__(583)/* .codes.ERR_INVALID_ARG_TYPE */ .q.ERR_INVALID_ARG_TYPE;
+var ERR_INVALID_ARG_TYPE = (__nccwpck_require__(7214)/* .codes.ERR_INVALID_ARG_TYPE */ .q.ERR_INVALID_ARG_TYPE);
 
 function from(Readable, iterable, opts) {
   var iterator;
@@ -5282,7 +6512,7 @@ module.exports = from;
 
 /***/ }),
 
-/***/ 7866:
+/***/ 6989:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -5301,7 +6531,7 @@ function once(callback) {
   };
 }
 
-var _require$codes = __nccwpck_require__(583)/* .codes */ .q,
+var _require$codes = (__nccwpck_require__(7214)/* .codes */ .q),
     ERR_MISSING_ARGS = _require$codes.ERR_MISSING_ARGS,
     ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED;
 
@@ -5320,7 +6550,7 @@ function destroyer(stream, reading, writing, callback) {
   stream.on('close', function () {
     closed = true;
   });
-  if (eos === undefined) eos = __nccwpck_require__(1604);
+  if (eos === undefined) eos = __nccwpck_require__(6080);
   eos(stream, {
     readable: reading,
     writable: writing
@@ -5386,13 +6616,13 @@ module.exports = pipeline;
 
 /***/ }),
 
-/***/ 3813:
+/***/ 9948:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var ERR_INVALID_OPT_VALUE = __nccwpck_require__(583)/* .codes.ERR_INVALID_OPT_VALUE */ .q.ERR_INVALID_OPT_VALUE;
+var ERR_INVALID_OPT_VALUE = (__nccwpck_require__(7214)/* .codes.ERR_INVALID_OPT_VALUE */ .q.ERR_INVALID_OPT_VALUE);
 
 function highWaterMarkFrom(options, isDuplex, duplexKey) {
   return options.highWaterMark != null ? options.highWaterMark : isDuplex ? options[duplexKey] : null;
@@ -5420,48 +6650,48 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6268:
+/***/ 2387:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __nccwpck_require__(2413);
+module.exports = __nccwpck_require__(2781);
 
 
 /***/ }),
 
-/***/ 3901:
+/***/ 1642:
 /***/ ((module, exports, __nccwpck_require__) => {
 
-var Stream = __nccwpck_require__(2413);
+var Stream = __nccwpck_require__(2781);
 if (process.env.READABLE_STREAM === 'disable' && Stream) {
   module.exports = Stream.Readable;
   Object.assign(module.exports, Stream);
   module.exports.Stream = Stream;
 } else {
-  exports = module.exports = __nccwpck_require__(7640);
+  exports = module.exports = __nccwpck_require__(1433);
   exports.Stream = Stream || exports;
   exports.Readable = exports;
-  exports.Writable = __nccwpck_require__(8549);
-  exports.Duplex = __nccwpck_require__(914);
-  exports.Transform = __nccwpck_require__(576);
-  exports.PassThrough = __nccwpck_require__(5140);
-  exports.finished = __nccwpck_require__(1604);
-  exports.pipeline = __nccwpck_require__(7866);
+  exports.Writable = __nccwpck_require__(6993);
+  exports.Duplex = __nccwpck_require__(1359);
+  exports.Transform = __nccwpck_require__(4415);
+  exports.PassThrough = __nccwpck_require__(1542);
+  exports.finished = __nccwpck_require__(6080);
+  exports.pipeline = __nccwpck_require__(6989);
 }
 
 
 /***/ }),
 
-/***/ 1128:
+/***/ 4347:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __nccwpck_require__(9846);
+module.exports = __nccwpck_require__(6244);
 
 /***/ }),
 
-/***/ 9846:
+/***/ 6244:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
-var RetryOperation = __nccwpck_require__(3777);
+var RetryOperation = __nccwpck_require__(5369);
 
 exports.operation = function(options) {
   var timeouts = exports.timeouts(options);
@@ -5565,7 +6795,7 @@ exports.wrap = function(obj, options, methods) {
 
 /***/ }),
 
-/***/ 3777:
+/***/ 5369:
 /***/ ((module) => {
 
 function RetryOperation(timeouts, options) {
@@ -5730,12 +6960,12 @@ RetryOperation.prototype.mainError = function() {
 
 /***/ }),
 
-/***/ 582:
+/***/ 1867:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /* eslint-disable node/no-deprecated-api */
-var buffer = __nccwpck_require__(4293)
+var buffer = __nccwpck_require__(4300)
 var Buffer = buffer.Buffer
 
 // alternative to using Object.keys for old browsers
@@ -5802,7 +7032,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 
 /***/ }),
 
-/***/ 9990:
+/***/ 5118:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -5810,7 +7040,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 
 
 
-var buffer = __nccwpck_require__(4293)
+var buffer = __nccwpck_require__(4300)
 var Buffer = buffer.Buffer
 
 var safer = {}
@@ -5887,11 +7117,8 @@ module.exports = safer
 
 /***/ }),
 
-/***/ 1853:
+/***/ 3232:
 /***/ ((module) => {
-
-"use strict";
-
 
 const errorCode = {
   generic: 'ERR_GENERIC_CLIENT',
@@ -5899,7 +7126,8 @@ const errorCode = {
   badPath: 'ERR_BAD_PATH',
   permission: 'EACCES',
   notexist: 'ENOENT',
-  notdir: 'ENOTDIR'
+  notdir: 'ENOTDIR',
+  badAuth: 'ERR_BAD_AUTH',
 };
 
 const targetType = {
@@ -5908,34 +7136,29 @@ const targetType = {
   writeDir: 3,
   readDir: 4,
   readObj: 5,
-  writeObj: 6
+  writeObj: 6,
 };
 
 module.exports = {
   errorCode,
-  targetType
+  targetType,
 };
 
 
 /***/ }),
 
-/***/ 9526:
+/***/ 7551:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
-/**
- * ssh2 sftp client for node
- */
 
 
-
-const { Client } = __nccwpck_require__(3961);
-const fs = __nccwpck_require__(5747);
-const concat = __nccwpck_require__(743);
-const promiseRetry = __nccwpck_require__(9360);
-const { join, parse } = __nccwpck_require__(5622);
+const { Client } = __nccwpck_require__(5869);
+const fs = __nccwpck_require__(7147);
+const concat = __nccwpck_require__(5107);
+const promiseRetry = __nccwpck_require__(4742);
+const { join, parse } = __nccwpck_require__(1017);
 const {
-  fmtError,
   addTempListeners,
   removeTempListeners,
   haveConnection,
@@ -5943,12 +7166,12 @@ const {
   localExists,
   haveLocalAccess,
   haveLocalCreate,
-  sleep,
-} = __nccwpck_require__(8481);
-const { errorCode } = __nccwpck_require__(1853);
+} = __nccwpck_require__(9432);
+const { errorCode } = __nccwpck_require__(3232);
 
 class SftpClient {
   constructor(clientName) {
+    this.version = '9.0.2';
     this.client = new Client();
     this.sftp = undefined;
     this.clientName = clientName ? clientName : 'sftp';
@@ -5961,7 +7184,7 @@ class SftpClient {
     this.debug = undefined;
 
     this.client.on('close', () => {
-      if (this.endCalled || this.closeHandled) {
+      if (this.endCalled || this.errorHandled || this.closeHandled) {
         // we are processing an expected end event or close event handled elsewhere
         this.debugMsg('Global: Ignoring handled close event');
       } else {
@@ -5971,7 +7194,7 @@ class SftpClient {
     });
 
     this.client.on('end', () => {
-      if (this.endCalled || this.endHandled) {
+      if (this.endCalled || this.errorHandled || this.endHandled) {
         // end event expected or handled elsewhere
         this.debugMsg('Global: Ignoring hanlded end event');
       } else {
@@ -5983,14 +7206,13 @@ class SftpClient {
     this.client.on('error', (err) => {
       if (this.endCalled || this.errorHandled) {
         // error event expected or handled elsewhere
-        this.debugMsg('Global: Ignoring handled error');
+        this.debugMsg(`Global: Ignoring handled error: ${err.message}`);
       } else {
         this.debugMsg(`Global; Handling unexpected error; ${err.message}`);
         this.sftp = undefined;
         console.log(
           `ssh2-sftp-client: Unexpected error: ${err.message}. Error code: ${err.code}`
         );
-        //throw fmtError(err, 'Global');
       }
     });
   }
@@ -6007,6 +7229,45 @@ class SftpClient {
     }
   }
 
+  fmtError(err, name = 'sftp', eCode, retryCount) {
+    let msg = '';
+    let code = '';
+    const retry = retryCount
+      ? ` after ${retryCount} ${retryCount > 1 ? 'attempts' : 'attempt'}`
+      : '';
+
+    if (err === undefined) {
+      msg = `${name}: Undefined error - probably a bug!`;
+      code = errorCode.generic;
+    } else if (typeof err === 'string') {
+      msg = `${name}: ${err}${retry}`;
+      code = eCode ? eCode : errorCode.generic;
+    } else if (err.custom) {
+      msg = `${name}->${err.message}${retry}`;
+      code = err.code;
+    } else {
+      switch (err.code) {
+        case 'ENOTFOUND':
+          msg = `${name}: Address lookup failed for host${retry}`;
+          break;
+        case 'ECONNREFUSED':
+          msg = `${name}: Remote host refused connection${retry}`;
+          break;
+        case 'ECONNRESET':
+          msg = `${name}: Remote host has reset the connection: ${err.message}${retry}`;
+          break;
+        default:
+          msg = `${name}: ${err.message}${retry}`;
+      }
+      code = err.code ? err.code : errorCode.generic;
+    }
+    const newError = new Error(msg);
+    newError.code = code;
+    newError.custom = true;
+    this.debugMsg(`${newError.message} (${newError.code})`);
+    return newError;
+  }
+
   /**
    * Add a listner to the client object. This is rarely necessary and can be
    * the source of errors. It is the client's responsibility to remove the
@@ -6017,12 +7278,10 @@ class SftpClient {
    * @param {function} callback - function called when event triggers
    */
   on(eventType, callback) {
-    this.debugMsg(`Adding listener to ${eventType} event`);
     this.client.prependListener(eventType, callback);
   }
 
   removeListener(eventType, callback) {
-    this.debugMsg(`Removing listener from ${eventType} event`);
     this.client.removeListener(eventType, callback);
   }
 
@@ -6039,54 +7298,36 @@ class SftpClient {
    *
    * @param {Object} config - an SFTP configuration object
    *
-   * @return {Promise} which will resolve to an sftp client object
+   * @return {Promise<Object>} which will resolve to an sftp client object
    *
    */
   getConnection(config) {
-    let doReady;
-    return (
-      new Promise((resolve, reject) => {
-        addTempListeners(this, 'getConnection', reject);
-        this.debugMsg('getConnection: created promise');
-        doReady = () => {
-          this.debugMsg('getConnection: got connection - promise resolved');
-          resolve(true);
-        };
-        this.on('ready', doReady);
-        this.client.connect(config);
-      })
-        // .catch((err) => {
-        //   return Promise.reject(err);
-        // })
-        .finally(async (resp) => {
-          this.debugMsg('getConnection: finally clause fired');
-          await sleep(500);
-          this.removeListener('ready', doReady);
-          removeTempListeners(this, 'getConnection');
-          this._resetEventFlags();
-          return resp;
-        })
-    );
+    let doReady, listeners;
+    return new Promise((resolve, reject) => {
+      listeners = addTempListeners(this, 'getConnection', reject);
+      doReady = () => {
+        this.debugMsg('getConnection ready listener: got connection - promise resolved');
+        resolve(true);
+      };
+      this.on('ready', doReady);
+      this.client.connect(config);
+    }).finally(() => {
+      this.removeListener('ready', doReady);
+      removeTempListeners(this, listeners, 'getConnection');
+    });
   }
 
   getSftpChannel() {
     return new Promise((resolve, reject) => {
-      addTempListeners(this, 'getSftpChannel', reject);
-      this.debugMsg('getSftpChannel: created promise');
       this.client.sftp((err, sftp) => {
         if (err) {
-          this.debugMsg(`getSftpChannel: SFTP Channel Error: ${err.message}`);
-          reject(fmtError(err, 'getSftpChannel', err.code));
+          reject(this.fmtError(err, 'getSftpChannel', err.code));
         } else {
           this.debugMsg('getSftpChannel: SFTP channel established');
           this.sftp = sftp;
           resolve(sftp);
         }
       });
-    }).finally((resp) => {
-      this.debugMsg('getSftpChannel: finally clause fired');
-      removeTempListeners(this, 'getSftpChannel');
-      this._resetEventFlags();
     });
   }
 
@@ -6099,42 +7340,60 @@ class SftpClient {
    *
    * @param {Object} config - an SFTP configuration object
    *
-   * @return {Promise} which will resolve to an sftp client object
+   * @return {Promise<Object>} which will resolve to an sftp client object
    *
    */
   async connect(config) {
+    let listeners;
+
     try {
+      listeners = addTempListeners(this, 'connect');
       if (config.debug) {
         this.debug = config.debug;
         this.debugMsg('connect: Debugging turned on');
+        this.debugMsg(`ssh2-sftp-client Version: ${this.version} `, process.versions);
       }
       if (this.sftp) {
-        this.debugMsg('connect: Already connected - reject');
-        throw fmtError(
+        throw this.fmtError(
           'An existing SFTP connection is already defined',
           'connect',
           errorCode.connect
         );
       }
-      await promiseRetry(
-        (retry, attempt) => {
+      const retryOpts = {
+        retries: config.retries ?? 1,
+        factor: config.factor ?? 2,
+        minTimeout: config.retry_minTimeout ?? 25000,
+      };
+      await promiseRetry(retryOpts, async (retry, attempt) => {
+        try {
           this.debugMsg(`connect: Connect attempt ${attempt}`);
-          return this.getConnection(config).catch((err) => {
-            this.debugMsg('getConnection retry catch');
+          await this.getConnection(config);
+        } catch (err) {
+          switch (err.code) {
+            case 'ENOTFOUND':
+            case 'ECONNREFUSED':
+            case 'ERR_SOCKET_BAD_PORT':
+            throw err;
+          case undefined: {
+            if (err.message.endsWith('All configured authentication methods failed')) {
+              throw this.fmtError(err.message, 'getConnection', errorCode.badAuth);
+            }
             retry(err);
-          });
-        },
-        {
-          retries: config.retries || 1,
-          factor: config.retry_factor || 2,
-          minTimeout: config.retry_minTimeout || 1000,
+            break;
+          }
+          default:
+            retry(err);
+          }
         }
-      );
-      await this.getSftpChannel();
+      });
+      const sftp = await this.getSftpChannel();
+      return sftp;
     } catch (err) {
-      this.debugMsg(`connect: Error ${err.message}`);
-      this._resetEventFlags();
-      throw fmtError(err, 'connect');
+      await this.end();
+      throw err.custom ? err : this.fmtError(err, 'connect');
+    } finally {
+      removeTempListeners(this, listeners, 'connect');
     }
   }
 
@@ -6147,35 +7406,48 @@ class SftpClient {
    * Returns undefined if the path does not exists.
    *
    * @param {String} remotePath - remote path, may be relative
-   * @returns {Promise} - remote absolute path or undefined
+   * @returns {Promise<String>} - remote absolute path or ''
    */
-  realPath(remotePath) {
+  _realPath(rPath) {
     return new Promise((resolve, reject) => {
-      this.debugMsg(`realPath -> ${remotePath}`);
-      addTempListeners(this, 'realPath', reject);
-      if (haveConnection(this, 'realPath', reject)) {
-        this.sftp.realpath(remotePath, (err, absPath) => {
-          if (err) {
-            this.debugMsg(`realPath Error: ${err.message} Code: ${err.code}`);
-            if (err.code === 2) {
-              resolve('');
-            } else {
-              reject(
-                fmtError(`${err.message} ${remotePath}`, 'realPath', err.code)
-              );
-            }
+      this.debugMsg(`_realPath -> ${rPath}`);
+      this.sftp.realpath(rPath, (err, absPath) => {
+        if (err) {
+          if (err.code === 2) {
+            this.debugMsg('_realPath <- ""');
+            resolve('');
+          } else {
+            reject(this.fmtError(`${err.message} ${rPath}`, 'realPath', err.code));
           }
-          this.debugMsg(`realPath <- ${absPath}`);
-          resolve(absPath);
-        });
-      }
-    }).finally((rsp) => {
-      removeTempListeners(this, 'realPath');
-      this._resetEventFlags();
-      return rsp;
+        }
+        this.debugMsg(`_realPath <- ${absPath}`);
+        resolve(absPath);
+      });
     });
   }
 
+  async realPath(remotePath) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'realPath');
+      haveConnection(this, 'realPath');
+      return await this._realPath(remotePath);
+    } catch (e) {
+      throw e.custom
+        ? e
+        : this.fmtError(`${e.message} ${remotePath}`, 'realPath', e.code);
+    } finally {
+      removeTempListeners(this, listeners, 'realPath');
+    }
+  }
+
+  /**
+   * @async
+   *
+   * Return the current workding directory path
+   *
+   * @returns {Promise<String>} - current remote working directory
+   */
   cwd() {
     return this.realPath('.');
   }
@@ -6184,62 +7456,52 @@ class SftpClient {
    * Retrieves attributes for path
    *
    * @param {String} remotePath - a string containing the path to a file
-   * @return {Promise} stats - attributes info
+   * @return {Promise<Object>} stats - attributes info
    */
-  async stat(remotePath) {
-    const _stat = (aPath) => {
-      return new Promise((resolve, reject) => {
-        this.debugMsg(`_stat: ${aPath}`);
-        addTempListeners(this, '_stat', reject);
-        this.sftp.stat(aPath, (err, stats) => {
-          if (err) {
-            this.debugMsg(`_stat: Error ${err.message} code: ${err.code}`);
-            if (err.code === 2 || err.code === 4) {
-              reject(
-                fmtError(
-                  `No such file: ${remotePath}`,
-                  '_stat',
-                  errorCode.notexist
-                )
-              );
-            } else {
-              reject(
-                fmtError(`${err.message} ${remotePath}`, '_stat', err.code)
-              );
-            }
+  _stat(aPath) {
+    return new Promise((resolve, reject) => {
+      this.debugMsg(`_stat: ${aPath}`);
+      this.sftp.stat(aPath, (err, stats) => {
+        if (err) {
+          if (err.code === 2 || err.code === 4) {
+            reject(this.fmtError(`No such file: ${aPath}`, '_stat', errorCode.notexist));
           } else {
-            let result = {
-              mode: stats.mode,
-              uid: stats.uid,
-              gid: stats.gid,
-              size: stats.size,
-              accessTime: stats.atime * 1000,
-              modifyTime: stats.mtime * 1000,
-              isDirectory: stats.isDirectory(),
-              isFile: stats.isFile(),
-              isBlockDevice: stats.isBlockDevice(),
-              isCharacterDevice: stats.isCharacterDevice(),
-              isSymbolicLink: stats.isSymbolicLink(),
-              isFIFO: stats.isFIFO(),
-              isSocket: stats.isSocket(),
-            };
-            this.debugMsg('_stat: stats <- ', result);
-            resolve(result);
+            reject(this.fmtError(`${err.message} ${aPath}`, '_stat', err.code));
           }
-        });
-      }).finally((rsp) => {
-        removeTempListeners(this, 'stat');
-        return rsp;
+        } else {
+          const result = {
+            mode: stats.mode,
+            uid: stats.uid,
+            gid: stats.gid,
+            size: stats.size,
+            accessTime: stats.atime * 1000,
+            modifyTime: stats.mtime * 1000,
+            isDirectory: stats.isDirectory(),
+            isFile: stats.isFile(),
+            isBlockDevice: stats.isBlockDevice(),
+            isCharacterDevice: stats.isCharacterDevice(),
+            isSymbolicLink: stats.isSymbolicLink(),
+            isFIFO: stats.isFIFO(),
+            isSocket: stats.isSocket(),
+          };
+          this.debugMsg('_stat: stats <- ', result);
+          resolve(result);
+        }
       });
-    };
+    });
+  }
 
+  async stat(remotePath) {
+    let listeners;
     try {
+      listeners = addTempListeners(this, 'stat');
       haveConnection(this, 'stat');
-      let absPath = await normalizeRemotePath(this, remotePath);
-      return _stat(absPath);
+      const absPath = await normalizeRemotePath(this, remotePath);
+      return await this._stat(absPath);
     } catch (err) {
-      this._resetEventFlags();
-      throw err.custom ? err : fmtError(err, 'stat', err.code);
+      throw err.custom ? err : this.fmtError(err, 'stat', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'stat');
     }
   }
 
@@ -6251,51 +7513,51 @@ class SftpClient {
    *
    * @param {string} remotePath - path to the object on the sftp server.
    *
-   * @return {Promise} returns false if object does not exist. Returns type of
+   * @return {Promise<Boolean|String>} returns false if object does not exist. Returns type of
    *                   object if it does
    */
-  async exists(remotePath) {
+  async _exists(rPath) {
     try {
-      if (haveConnection(this, 'exists')) {
-        if (remotePath === '.') {
-          this.debugMsg('exists: . = d');
-          return 'd';
-        }
-        let absPath = await normalizeRemotePath(this, remotePath);
-        try {
-          this.debugMsg(`exists: ${remotePath} -> ${absPath}`);
-          let info = await this.stat(absPath);
-          this.debugMsg('exists: <- ', info);
-          if (info.isDirectory) {
-            this.debugMsg(`exists: ${remotePath} = d`);
-            return 'd';
-          }
-          if (info.isSymbolicLink) {
-            this.debugMsg(`exists: ${remotePath} = l`);
-            return 'l';
-          }
-          if (info.isFile) {
-            this.debugMsg(`exists: ${remotePath} = -`);
-            return '-';
-          }
-          this.debugMsg(`exists: ${remotePath} = false`);
-          return false;
-        } catch (err) {
-          if (err.code === errorCode.notexist) {
-            this.debugMsg(
-              `exists: ${remotePath} = false errorCode = ${err.code}`
-            );
-            return false;
-          }
-          this.debugMsg(`exists: throw error ${err.message} ${err.code}`);
-          throw err;
-        }
+      const absPath = await normalizeRemotePath(this, rPath);
+      this.debugMsg(`exists: ${rPath} -> ${absPath}`);
+      const info = await this._stat(absPath);
+      this.debugMsg('exists: <- ', info);
+      if (info.isDirectory) {
+        this.debugMsg(`exists: ${rPath} = d`);
+        return 'd';
       }
-      this.debugMsg(`exists: default ${remotePath} = false`);
+      if (info.isSymbolicLink) {
+        this.debugMsg(`exists: ${rPath} = l`);
+        return 'l';
+      }
+      if (info.isFile) {
+        this.debugMsg(`exists: ${rPath} = -`);
+        return '-';
+      }
+      this.debugMsg(`exists: ${rPath} = false`);
       return false;
     } catch (err) {
-      this._resetEventFlags();
-      throw err.custom ? err : fmtError(err, 'exists', err.code);
+      if (err.code === errorCode.notexist) {
+        this.debugMsg(`exists: ${rPath} = false errorCode = ${err.code}`);
+        return false;
+      }
+      throw err.custom ? err : this.fmtError(err.message, 'exists', err.code);
+    }
+  }
+
+  async exists(remotePath) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'exists');
+      haveConnection(this, 'exists');
+      if (remotePath === '.') {
+        return 'd';
+      }
+      return await this._exists(remotePath);
+    } catch (err) {
+      throw err.custom ? err : this.fmtError(err, 'exists', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'exists');
     }
   }
 
@@ -6309,60 +7571,54 @@ class SftpClient {
    * accessTime, rights {user, group other}, owner and group.
    *
    * @param {String} remotePath - path to remote directory
-   * @param {RegExp} pattern - regular expression to match filenames
-   * @returns {Promise} array of file description objects
-   * @throws {Error}
+   * @param {function} filter - a filter function used to select return entries
+   * @returns {Promise<Array>} array of file description objects
    */
-  list(remotePath, pattern = /.*/) {
+  _list(remotePath, filter) {
     return new Promise((resolve, reject) => {
-      if (haveConnection(this, 'list', reject)) {
-        const reg = /-/gi;
-        this.debugMsg(`list: ${remotePath} filter: ${pattern}`);
-        addTempListeners(this, 'list', reject);
-        this.sftp.readdir(remotePath, (err, fileList) => {
-          if (err) {
-            this.debugMsg(`list: Error ${err.message} code: ${err.code}`);
-            reject(fmtError(`${err.message} ${remotePath}`, 'list', err.code));
+      this.sftp.readdir(remotePath, (err, fileList) => {
+        if (err) {
+          reject(this.fmtError(`${err.message} ${remotePath}`, 'list', err.code));
+        } else {
+          const reg = /-/gi;
+          const newList = fileList.map((item) => {
+            return {
+              type: item.longname.slice(0, 1),
+              name: item.filename,
+              size: item.attrs.size,
+              modifyTime: item.attrs.mtime * 1000,
+              accessTime: item.attrs.atime * 1000,
+              rights: {
+                user: item.longname.slice(1, 4).replace(reg, ''),
+                group: item.longname.slice(4, 7).replace(reg, ''),
+                other: item.longname.slice(7, 10).replace(reg, ''),
+              },
+              owner: item.attrs.uid,
+              group: item.attrs.gid,
+              longname: item.longname,
+            };
+          });
+          if (filter) {
+            resolve(newList.filter((item) => filter(item)));
           } else {
-            let newList = [];
-            // reset file info
-            if (fileList) {
-              newList = fileList.map((item) => {
-                return {
-                  type: item.longname.substr(0, 1),
-                  name: item.filename,
-                  size: item.attrs.size,
-                  modifyTime: item.attrs.mtime * 1000,
-                  accessTime: item.attrs.atime * 1000,
-                  rights: {
-                    user: item.longname.substr(1, 3).replace(reg, ''),
-                    group: item.longname.substr(4, 3).replace(reg, ''),
-                    other: item.longname.substr(7, 3).replace(reg, ''),
-                  },
-                  owner: item.attrs.uid,
-                  group: item.attrs.gid,
-                };
-              });
-            }
-            // provide some compatibility for auxList
-            let regex;
-            if (pattern instanceof RegExp) {
-              regex = pattern;
-            } else {
-              let newPattern = pattern.replace(/\*([^*])*?/gi, '.*');
-              regex = new RegExp(newPattern);
-            }
-            let filteredList = newList.filter((item) => regex.test(item.name));
-            this.debugMsg('list: result: ', filteredList);
-            resolve(filteredList);
+            resolve(newList);
           }
-        });
-      }
-    }).finally((rsp) => {
-      removeTempListeners(this, 'list');
-      this._resetEventFlags();
-      return rsp;
+        }
+      });
     });
+  }
+
+  async list(remotePath, filter) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'list');
+      haveConnection(this, 'list');
+      return await this._list(remotePath, filter);
+    } catch (e) {
+      throw e.custom ? e : this.fmtError(`${e.message} ${remotePath}`, 'list', e.code);
+    } finally {
+      removeTempListeners(this, listeners, 'list');
+    }
   }
 
   /**
@@ -6378,94 +7634,84 @@ class SftpClient {
    * @param {Object} options - options object with supported properties of readStreamOptions,
    *                          writeStreamOptions and pipeOptions.
    *
-   * @return {Promise}
+   * *Important Note*: The ability to set ''autoClose' on read/write streams and 'end' on pipe() calls
+   * is no longer supported. New methods 'createReadStream()' and 'createWriteStream()' have been
+   * added to support low-level access to stream objects.
+   *
+   * @return {Promise<String|Stream|Buffer>}
    */
-  get(
-    remotePath,
-    dst,
-    options = { readStreamOptions: {}, writeStreamOptions: {}, pipeOptions: {} }
-  ) {
+  _get(rPath, dst, opts) {
     let rdr, wtr;
-
     return new Promise((resolve, reject) => {
-      if (haveConnection(this, 'get', reject)) {
-        this.debugMsg(`get -> ${remotePath} `, options);
-        addTempListeners(this, 'get', reject);
-        rdr = this.sftp.createReadStream(
-          remotePath,
-          options.readStreamOptions ? options.readStreamOptions : {}
-        );
-        rdr.once('error', (err) => {
-          reject(fmtError(`${err.message} ${remotePath}`, 'get', err.code));
+      opts = {
+        ...opts,
+        readStreamOptions: { autoClose: true },
+        writeStreamOptions: { autoClose: true },
+        pipeOptions: { end: true },
+      };
+      rdr = this.sftp.createReadStream(rPath, opts.readStreamOptions);
+      rdr.once('error', (err) => {
+        reject(this.fmtError(`${err.message} ${rPath}`, '_get', err.code));
+      });
+      if (dst === undefined) {
+        // no dst specified, return buffer of data
+        this.debugMsg('get resolving buffer of data');
+        wtr = concat((buff) => {
+          resolve(buff);
         });
-        if (dst === undefined) {
-          // no dst specified, return buffer of data
-          this.debugMsg('get returning buffer of data');
-          wtr = concat((buff) => {
-            //rdr.removeAllListeners('error');
-            resolve(buff);
-          });
+      } else if (typeof dst === 'string') {
+        // dst local file path
+        this.debugMsg('get returning local file');
+        const localCheck = haveLocalCreate(dst);
+        if (!localCheck.status) {
+          reject(
+            this.fmtError(
+              `Bad path: ${dst}: ${localCheck.details}`,
+              'get',
+              localCheck.code
+            )
+          );
+          return;
         } else {
-          if (typeof dst === 'string') {
-            // dst local file path
-            this.debugMsg('get returning local file');
-            const localCheck = haveLocalCreate(dst);
-            if (!localCheck.status) {
-              return reject(
-                fmtError(
-                  `Bad path: ${dst}: ${localCheck.details}`,
-                  'get',
-                  localCheck.code
-                )
-              );
-            }
-            wtr = fs.createWriteStream(
-              dst,
-              options.writeStreamOptions ? options.writeStreamOptions : {}
-            );
-          } else {
-            this.debugMsg('get returning data into supplied stream');
-            wtr = dst;
-          }
-          wtr.once('error', (err) => {
-            reject(
-              fmtError(
-                `${err.message} ${typeof dst === 'string' ? dst : ''}`,
-                'get',
-                err.code
-              )
-            );
-          });
-          rdr.once('end', () => {
-            if (typeof dst === 'string') {
-              resolve(dst);
-            } else {
-              resolve(wtr);
-            }
-          });
+          wtr = fs.createWriteStream(dst, opts.writeStreamOptions);
         }
-        rdr.pipe(wtr, options.pipeOptions ? options.pipeOptions : {});
+      } else {
+        this.debugMsg('get: returning data into supplied stream');
+        wtr = dst;
       }
-    }).finally((rsp) => {
-      removeTempListeners(this, 'get');
-      this._resetEventFlags();
-      if (
-        rdr &&
-        options.readStreamOptions &&
-        options.readStreamOptions.autoClose === false
-      ) {
-        rdr.destroy();
-      }
-      if (
-        wtr &&
-        options.writeStreamOptions &&
-        options.writeStreamOptions.autoClose === false &&
-        typeof dst === 'string'
-      ) {
-        wtr.destroy();
-      }
-      return rsp;
+      wtr.once('error', (err) => {
+        reject(
+          this.fmtError(
+            `${err.message} ${typeof dst === 'string' ? dst : '<stream>'}`,
+            'get',
+            err.code
+          )
+        );
+      });
+      rdr.once('end', () => {
+        if (typeof dst === 'string') {
+          this.debugMsg('get: resolving with dst filename');
+          resolve(dst);
+        } else if (dst !== undefined) {
+          this.debugMsg('get: resolving with writer stream object');
+          resolve(wtr);
+        }
+      });
+      rdr.pipe(wtr, opts.pipeOptions);
     });
+  }
+
+  async get(remotePath, dst, options) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'get');
+      haveConnection(this, 'get');
+      return await this._get(remotePath, dst, options);
+    } catch (e) {
+      throw e.custom ? e : this.fmtError(`${e.message} ${remotePath}`, 'get', e.code);
+    } finally {
+      removeTempListeners(this, listeners, 'get');
+    }
   }
 
   /**
@@ -6473,54 +7719,45 @@ class SftpClient {
    * Downloads a file at remotePath to localPath using parallel reads
    * for faster throughput.
    *
-   * See 'fastGet' at
-   * https://github.com/mscdex/ssh2-streams/blob/master/SFTPStream.md
-   *
    * @param {String} remotePath
    * @param {String} localPath
    * @param {Object} options
-   * @return {Promise} the result of downloading the file
+   * @return {Promise<String>} the result of downloading the file
    */
+  _fastGet(rPath, lPath, opts) {
+    return new Promise((resolve, reject) => {
+      this.sftp.fastGet(rPath, lPath, opts, (err) => {
+        if (err) {
+          reject(this.fmtError(`${err.message} Remote: ${rPath} Local: ${lPath}`));
+        }
+        resolve(`${rPath} was successfully download to ${lPath}!`);
+      });
+    });
+  }
+
   async fastGet(remotePath, localPath, options) {
+    let listeners;
     try {
+      listeners = addTempListeners(this, 'fastGet');
+      haveConnection(this, 'fastGet');
       const ftype = await this.exists(remotePath);
       if (ftype !== '-') {
-        const msg =
-          ftype === false
-            ? `No such file ${remotePath}`
-            : `Not a regular file ${remotePath}`;
-        let err = new Error(msg);
-        err.code = errorCode.badPath;
-        throw err;
+        const msg = `${!ftype ? 'No such file ' : 'Not a regular file'} ${remotePath}`;
+        throw this.fmtError(msg, 'fastGet', errorCode.badPath);
       }
       const localCheck = haveLocalCreate(localPath);
       if (!localCheck.status) {
-        let err = new Error(`Bad path: ${localPath}: ${localCheck.details}`);
-        err.code = errorCode.badPath;
-        throw err;
+        throw this.fmtError(
+          `Bad path: ${localPath}: ${localCheck.details}`,
+          'fastGet',
+          errorCode.badPath
+        );
       }
-      await new Promise((resolve, reject) => {
-        if (haveConnection(this, 'fastGet', reject)) {
-          this.debugMsg(
-            `fastGet -> remote: ${remotePath} local: ${localPath} `,
-            options
-          );
-          addTempListeners(this, 'fastGet', reject);
-          this.sftp.fastGet(remotePath, localPath, options, (err) => {
-            if (err) {
-              this.debugMsg(`fastGet error ${err.message} code: ${err.code}`);
-              reject(err);
-            }
-            resolve(`${remotePath} was successfully download to ${localPath}!`);
-          });
-        }
-      }).finally((rsp) => {
-        removeTempListeners(this, 'fastGet');
-        return rsp;
-      });
+      return await this._fastGet(remotePath, localPath, options);
     } catch (err) {
-      this._resetEventFlags();
-      throw fmtError(err, 'fastGet');
+      throw this.fmtError(err, 'fastGet');
+    } finally {
+      removeTempListeners(this, listeners, 'fastGet');
     }
   }
 
@@ -6535,55 +7772,51 @@ class SftpClient {
    * @param {String} localPath
    * @param {String} remotePath
    * @param {Object} options
-   * @return {Promise} the result of downloading the file
+   * @return {Promise<String>} the result of downloading the file
    */
-  fastPut(localPath, remotePath, options) {
-    this.debugMsg(`fastPut -> local ${localPath} remote ${remotePath}`);
+  _fastPut(lPath, rPath, opts) {
     return new Promise((resolve, reject) => {
+      this.sftp.fastPut(lPath, rPath, opts, (err) => {
+        if (err) {
+          reject(
+            this.fmtError(
+              `${err.message} Local: ${lPath} Remote: ${rPath}`,
+              'fastPut',
+              err.code
+            )
+          );
+        }
+        resolve(`${lPath} was successfully uploaded to ${rPath}!`);
+      });
+    });
+  }
+
+  async fastPut(localPath, remotePath, options) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'fastPut');
+      this.debugMsg(`fastPut -> local ${localPath} remote ${remotePath}`);
+      haveConnection(this, 'fastPut');
       const localCheck = haveLocalAccess(localPath);
       if (!localCheck.status) {
-        reject(
-          fmtError(
-            `Bad path: ${localPath}: ${localCheck.details}`,
-            'fastPut',
-            localCheck.code
-          )
+        throw this.fmtError(
+          `Bad path: ${localPath}: ${localCheck.details}`,
+          'fastPut',
+          localCheck.code
         );
       } else if (localCheck.status && localExists(localPath) === 'd') {
-        reject(
-          fmtError(
-            `Bad path: ${localPath} not a regular file`,
-            'fastPut',
-            errorCode.badPath
-          )
+        throw this.fmtError(
+          `Bad path: ${localPath} not a regular file`,
+          'fastgPut',
+          errorCode.badPath
         );
-      } else if (haveConnection(this, 'fastPut', reject)) {
-        this.debugMsg(
-          `fastPut -> local: ${localPath} remote: ${remotePath} opts: ${JSON.stringify(
-            options
-          )}`
-        );
-        addTempListeners(this, 'fastPut', reject);
-        this.sftp.fastPut(localPath, remotePath, options, (err) => {
-          if (err) {
-            this.debugMsg(`fastPut error ${err.message} ${err.code}`);
-            reject(
-              fmtError(
-                `${err.message} Local: ${localPath} Remote: ${remotePath}`,
-                'fastPut',
-                err.code
-              )
-            );
-          }
-          this.debugMsg('fastPut file transferred');
-          resolve(`${localPath} was successfully uploaded to ${remotePath}!`);
-        });
       }
-    }).finally((rsp) => {
-      removeTempListeners(this, 'fastPut');
-      this._resetEventFlags();
-      return rsp;
-    });
+      return await this._fastPut(localPath, remotePath, options);
+    } catch (e) {
+      throw e.custom ? e : this.fmtError(e.message, 'fastPut', e.code);
+    } finally {
+      removeTempListeners(this, listeners, 'fastPut');
+    }
   }
 
   /**
@@ -6596,92 +7829,72 @@ class SftpClient {
    * @param  {Object} options - options used for read, write stream and pipe configuration
    *                            value supported by node. Allowed properties are readStreamOptions,
    *                            writeStreamOptions and pipeOptions.
-   * @return {Promise}
+   *
+   * *Important Note*: The ability to set ''autoClose' on read/write streams and 'end' on pipe() calls
+   * is no longer supported. New methods 'createReadStream()' and 'createWriteStream()' have been
+   * added to support low-level access to stream objects.
+   *
+   * @return {Promise<String>}
    */
-  put(
-    localSrc,
-    remotePath,
-    options = { readStreamOptions: {}, writeStreamOptions: {}, pipeOptions: {} }
-  ) {
+  _put(lPath, rPath, opts) {
     let wtr, rdr;
-
     return new Promise((resolve, reject) => {
+      opts = {
+        ...opts,
+        readStreamOptions: { autoClose: true },
+        writeStreamOptions: { autoClose: true },
+        pipeOptions: { end: true },
+      };
+      wtr = this.sftp.createWriteStream(rPath, opts.writeStreamOptions);
+      wtr.once('error', (err) => {
+        reject(this.fmtError(`${err.message} ${rPath}`, 'put', err.code));
+      });
+      wtr.once('close', () => {
+        resolve(`Uploaded data stream to ${rPath}`);
+      });
+      if (lPath instanceof Buffer) {
+        this.debugMsg('put source is a buffer');
+        wtr.end(lPath);
+      } else {
+        rdr =
+          typeof lPath === 'string'
+            ? fs.createReadStream(lPath, opts.readStreamOptions)
+            : lPath;
+        rdr.once('error', (err) => {
+          reject(
+            this.fmtError(
+              `${err.message} ${typeof lPath === 'string' ? lPath : '<stream>'}`,
+              '_put',
+              err.code
+            )
+          );
+        });
+        rdr.pipe(wtr, opts.pipeOptions);
+      }
+    });
+  }
+
+  async put(localSrc, remotePath, options) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'put');
+      haveConnection(this, 'put');
       if (typeof localSrc === 'string') {
         const localCheck = haveLocalAccess(localSrc);
         if (!localCheck.status) {
-          this.debugMsg(`put: local source check error ${localCheck.details}`);
-          return reject(
-            fmtError(
-              `Bad path: ${localSrc}: ${localCheck.details}`,
-              'put',
-              localCheck.code
-            )
+          throw this.fmtError(
+            `Bad path: ${localSrc} ${localCheck.details}`,
+            'put',
+            localCheck.code
           );
         }
       }
-      if (haveConnection(this, 'put')) {
-        addTempListeners(this, 'put', reject);
-        wtr = this.sftp.createWriteStream(
-          remotePath,
-          options.writeStreamOptions ? options.writeStreamOptions : {}
-        );
-        wtr.once('error', (err) => {
-          this.debugMsg(`put: write stream error ${err.message}`);
-          reject(fmtError(`${err.message} ${remotePath}`, 'put', err.code));
-        });
-        wtr.once('finish', () => {
-          this.debugMsg('put: promise resolved');
-          resolve(`Uploaded data stream to ${remotePath}`);
-        });
-        if (localSrc instanceof Buffer) {
-          this.debugMsg('put source is a buffer');
-          wtr.end(localSrc);
-        } else {
-          if (typeof localSrc === 'string') {
-            this.debugMsg(`put source is a file path: ${localSrc}`);
-            rdr = fs.createReadStream(
-              localSrc,
-              options.readStreamOptions ? options.readStreamOptions : {}
-            );
-          } else {
-            this.debugMsg('put source is a stream');
-            rdr = localSrc;
-          }
-          rdr.once('error', (err) => {
-            this.debugMsg(`put: read stream error ${err.message}`);
-            reject(
-              fmtError(
-                `${err.message} ${
-                  typeof localSrc === 'string' ? localSrc : ''
-                }`,
-                'put',
-                err.code
-              )
-            );
-          });
-          rdr.pipe(wtr, options.pipeOptions ? options.pipeOptions : {});
-        }
-      }
-    }).finally((resp) => {
-      removeTempListeners(this, 'put');
-      this._resetEventFlags();
-      if (
-        rdr &&
-        options.readStreamOptions &&
-        options.readStreamOptions.autoClose === false &&
-        typeof localSrc === 'string'
-      ) {
-        rdr.destroy();
-      }
-      if (
-        wtr &&
-        options.writeStreamOptions &&
-        options.writeStreamOptions.autoClose === false
-      ) {
-        wtr.destroy();
-      }
-      return resp;
-    });
+      return await this._put(localSrc, remotePath, options);
+    } catch (e) {
+      throw e.custom ? e : this.fmtError(e.message, 'put', e.code);
+    } finally {
+      removeTempListeners(this, listeners, 'put');
+    }
   }
 
   /**
@@ -6690,50 +7903,54 @@ class SftpClient {
    * @param  {Buffer|stream} input
    * @param  {String} remotePath
    * @param  {Object} options
-   * @return {Promise}
+   * @return {Promise<String>}
    */
-  append(input, remotePath, options = {}) {
-    return this.exists(remotePath).then((fileType) => {
-      if (fileType && fileType === 'd') {
-        return Promise.reject(
-          fmtError(
-            `Bad path: ${remotePath}: cannot append to a directory`,
-            'append',
-            errorCode.badPath
-          )
+  _append(input, rPath, opts) {
+    return new Promise((resolve, reject) => {
+      this.debugMsg(`append -> remote: ${rPath} `, opts);
+      opts.flags = 'a';
+      const stream = this.sftp.createWriteStream(rPath, opts);
+      stream.on('error', (err) => {
+        reject(this.fmtError(`${err.message} ${rPath}`, 'append', err.code));
+      });
+      stream.on('close', () => {
+        resolve(`Appended data to ${rPath}`);
+      });
+      if (input instanceof Buffer) {
+        stream.write(input);
+        stream.end();
+      } else {
+        input.pipe(stream);
+      }
+    });
+  }
+
+  async append(input, remotePath, options = {}) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'append');
+      if (typeof input === 'string') {
+        throw this.fmtError(
+          'Cannot append one file to another',
+          'append',
+          errorCode.badPath
         );
       }
-      return new Promise((resolve, reject) => {
-        if (haveConnection(this, 'append', reject)) {
-          if (typeof input === 'string') {
-            reject(fmtError('Cannot append one file to another', 'append'));
-          } else {
-            this.debugMsg(`append -> remote: ${remotePath} `, options);
-            addTempListeners(this, 'append', reject);
-            options.flags = 'a';
-            let stream = this.sftp.createWriteStream(remotePath, options);
-            stream.on('error', (err) => {
-              reject(
-                fmtError(`${err.message} ${remotePath}`, 'append', err.code)
-              );
-            });
-            stream.on('finish', () => {
-              resolve(`Appended data to ${remotePath}`);
-            });
-            if (input instanceof Buffer) {
-              stream.write(input);
-              stream.end();
-            } else {
-              input.pipe(stream);
-            }
-          }
-        }
-      }).finally((rsp) => {
-        removeTempListeners(this, 'append');
-        this._resetEventFlags();
-        return rsp;
-      });
-    });
+      haveConnection(this, 'append');
+      const fileType = await this.exists(remotePath);
+      if (fileType && fileType === 'd') {
+        throw this.fmtError(
+          `Bad path: ${remotePath}: cannot append to a directory`,
+          'append',
+          errorCode.badPath
+        );
+      }
+      await this._append(input, remotePath, options);
+    } catch (e) {
+      throw e.custom ? e : this.fmtError(e.message, 'append', e.code);
+    } finally {
+      removeTempListeners(this, listeners, 'append');
+    }
   }
 
   /**
@@ -6743,62 +7960,86 @@ class SftpClient {
    *
    * @param {string} remotePath - remote directory path.
    * @param {boolean} recursive - if true, recursively create directories
-   * @return {Promise}
+   * @return {Promise<String>}
    */
-  async mkdir(remotePath, recursive = false) {
-    const _mkdir = (p) => {
-      return new Promise((resolve, reject) => {
-        this.debugMsg(`_mkdir: create ${p}`);
-        addTempListeners(this, '_mkdir', reject);
-        this.sftp.mkdir(p, (err) => {
-          if (err) {
-            this.debugMsg(`_mkdir: Error ${err.message} code: ${err.code}`);
-            if (err.code === 4) {
-              //fix for windows dodgy error messages
-              let error = new Error(`Bad path: ${p} permission denied`);
-              error.code = errorCode.badPath;
-              reject(error);
-            } else if (err.code === 2) {
-              let error = new Error(
-                `Bad path: ${p} parent not a directory or not exist`
-              );
-              error.code = errorCode.badPath;
-              reject(error);
-            } else {
-              reject(err);
-            }
+  _doMkdir(p) {
+    return new Promise((resolve, reject) => {
+      this.sftp.mkdir(p, (err) => {
+        if (err) {
+          if (err.code === 4) {
+            //fix for windows dodgy error messages
+            reject(
+              this.fmtError(
+                `Bad path: ${p} permission denied`,
+                '_doMkdir',
+                errorCode.badPath
+              )
+            );
+          } else if (err.code === 2) {
+            reject(
+              this.fmtError(
+                `Bad path: ${p} parent not a directory or not exist`,
+                '_doMkdir',
+                errorCode.badPath
+              )
+            );
           } else {
-            this.debugMsg('_mkdir: directory created');
-            resolve(`${p} directory created`);
+            reject(this.fmtError(`${err.message} ${p}`, '_doMkdir', err.code));
           }
-        });
-      }).finally((rsp) => {
-        removeTempListeners(this, '_mkdir');
-        this._resetEventFlags();
-        return rsp;
+        } else {
+          resolve(`${p} directory created`);
+        }
       });
-    };
+    });
+  }
 
+  async _mkdir(remotePath, recursive) {
     try {
-      haveConnection(this, 'mkdir');
-      let rPath = await normalizeRemotePath(this, remotePath);
-      if (!recursive) {
-        return await _mkdir(rPath);
+      const rPath = await normalizeRemotePath(this, remotePath);
+      const targetExists = await this.exists(rPath);
+      if (targetExists && targetExists !== 'd') {
+        throw this.fmtError(
+          `Bad path: ${rPath} already exists as a file`,
+          '_mkdir',
+          errorCode.badPath
+        );
+      } else if (targetExists) {
+        return `${rPath} already exists`;
       }
-      let dir = parse(rPath).dir;
+      if (!recursive) {
+        return await this._doMkdir(rPath);
+      }
+      const dir = parse(rPath).dir;
       if (dir) {
-        let dirExists = await this.exists(dir);
+        const dirExists = await this.exists(dir);
         if (!dirExists) {
-          await this.mkdir(dir, true);
+          await this._mkdir(dir, true);
         } else if (dirExists !== 'd') {
-          let error = new Error(`Bad path: ${dir} not a directory`);
-          error.code = errorCode.badPath;
-          throw error;
+          throw this.fmtError(
+            `Bad path: ${dir} not a directory`,
+            '_mkdir',
+            errorCode.badPath
+          );
         }
       }
-      return await _mkdir(rPath);
+      return await this._doMkdir(rPath);
     } catch (err) {
-      throw fmtError(`${err.message}`, 'mkdir', err.code);
+      throw err.custom
+        ? err
+        : this.fmtError(`${err.message} ${remotePath}`, '_mkdir', err.code);
+    }
+  }
+
+  async mkdir(remotePath, recursive = false) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, '_mkdir');
+      haveConnection(this, 'mkdir');
+      return await this._mkdir(remotePath, recursive);
+    } catch (err) {
+      throw this.fmtError(`${err.message}`, 'mkdir', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'append');
     }
   }
 
@@ -6810,49 +8051,71 @@ class SftpClient {
    * @param {string} remotePath - path to directory to be removed
    * @param {boolean} recursive - if true, remove directories/files in target
    *                             directory
-   * @return {Promise}
+   * @return {Promise<String>}
    */
   async rmdir(remotePath, recursive = false) {
     const _rmdir = (p) => {
       return new Promise((resolve, reject) => {
         this.debugMsg(`rmdir -> ${p}`);
-        addTempListeners(this, 'rmdir', reject);
         this.sftp.rmdir(p, (err) => {
           if (err) {
-            this.debugMsg(`rmdir error ${err.message} code: ${err.code}`);
-            reject(fmtError(`${err.message} ${p}`, '_rmdir', err.code));
+            reject(this.fmtError(`${err.message} ${p}`, 'rmdir', err.code));
           }
           resolve('Successfully removed directory');
         });
-      }).finally((rsp) => {
-        removeTempListeners(this, 'rmdir');
-        return rsp;
       });
     };
 
+    const _dormdir = async (p, recur) => {
+      try {
+        if (recur) {
+          const list = await this.list(p);
+          if (list.length) {
+            const files = list.filter((item) => item.type !== 'd');
+            const dirs = list.filter((item) => item.type === 'd');
+            this.debugMsg('rmdir contents (files): ', files);
+            this.debugMsg('rmdir contents (dirs): ', dirs);
+            for (const d of dirs) {
+              await _dormdir(`${p}${this.remotePathSep}${d.name}`, true);
+            }
+            const promiseList = [];
+            for (const f of files) {
+              promiseList.push(this._delete(`${p}${this.remotePathSep}${f.name}`));
+            }
+            await Promise.all(promiseList);
+          }
+        }
+        return await _rmdir(p);
+      } catch (err) {
+        throw err.custom ? err : this.fmtError(err, '_dormdir', err.code);
+      }
+    };
+
+    let listeners;
     try {
+      listeners = addTempListeners(this, 'rmdir');
       haveConnection(this, 'rmdir');
-      let absPath = await normalizeRemotePath(this, remotePath);
-      if (!recursive) {
-        return _rmdir(absPath);
+      const absPath = await normalizeRemotePath(this, remotePath);
+      const dirStatus = await this.exists(absPath);
+      if (dirStatus && dirStatus !== 'd') {
+        throw this.fmtError(
+          `Bad path: ${absPath} not a directory`,
+          'rmdir',
+          errorCode.badPath
+        );
+      } else if (!dirStatus) {
+        throw this.fmtError(
+          `Bad path: ${absPath} No such file`,
+          'rmdir',
+          errorCode.badPath
+        );
+      } else {
+        return await _dormdir(absPath, recursive);
       }
-      let list = await this.list(absPath);
-      if (list.length) {
-        let files = list.filter((item) => item.type !== 'd');
-        let dirs = list.filter((item) => item.type === 'd');
-        this.debugMsg('rmdir contents (files): ', files);
-        this.debugMsg('rmdir contents (dirs): ', dirs);
-        for (let f of files) {
-          await this.delete(`${absPath}${this.remotePathSep}${f.name}`);
-        }
-        for (let d of dirs) {
-          await this.rmdir(`${absPath}${this.remotePathSep}${d.name}`, true);
-        }
-      }
-      return _rmdir(absPath);
     } catch (err) {
-      this._resetEventFlags();
-      throw err.custom ? err : fmtError(err, 'rmdir', err.code);
+      throw err.custom ? err : this.fmtError(err.message, 'rmdir', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'rmdir');
     }
   }
 
@@ -6864,34 +8127,35 @@ class SftpClient {
    * @param {string} remotePath - path to the file to delete
    * @param {boolean} notFoundOK - if true, ignore errors for missing target.
    *                               Default is false.
-   * @return {Promise} with string 'Successfully deleted file' once resolved
+   * @return {Promise<String>} with string 'Successfully deleted file' once resolved
    *
    */
-  delete(remotePath, notFoundOK = false) {
+  _delete(rPath, notFoundOK) {
     return new Promise((resolve, reject) => {
-      if (haveConnection(this, 'delete', reject)) {
-        this.debugMsg(`delete -> ${remotePath}`);
-        addTempListeners(this, 'delete', reject);
-        this.sftp.unlink(remotePath, (err) => {
-          if (err) {
-            this.debugMsg(`delete error ${err.message} code: ${err.code}`);
-            if (notFoundOK && err.code === 2) {
-              this.debugMsg('delete ignore missing target error');
-              resolve(`Successfully deleted ${remotePath}`);
-            } else {
-              reject(
-                fmtError(`${err.message} ${remotePath}`, 'delete', err.code)
-              );
-            }
+      this.sftp.unlink(rPath, (err) => {
+        if (err) {
+          if (notFoundOK && err.code === 2) {
+            resolve(`Successfully deleted ${rPath}`);
+          } else {
+            reject(this.fmtError(`${err.message} ${rPath}`, 'delete', err.code));
           }
-          resolve(`Successfully deleted ${remotePath}`);
-        });
-      }
-    }).finally((rsp) => {
-      removeTempListeners(this, 'delete');
-      this._resetEventFlags();
-      return rsp;
+        }
+        resolve(`Successfully deleted ${rPath}`);
+      });
     });
+  }
+
+  async delete(remotePath, notFoundOK = false) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'delete');
+      haveConnection(this, 'delete');
+      return await this._delete(remotePath, notFoundOK);
+    } catch (err) {
+      throw err.custom ? err : this.fmtError(err.message, 'delete', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'delete');
+    }
   }
 
   /**
@@ -6902,33 +8166,39 @@ class SftpClient {
    * @param {string} fromPath - path to the file to be renamed.
    * @param {string} toPath - path to the new name.
    *
-   * @return {Promise}
+   * @return {Promise<String>}
    *
    */
-  rename(fromPath, toPath) {
+  _rename(fPath, tPath) {
     return new Promise((resolve, reject) => {
-      if (haveConnection(this, 'rename', reject)) {
-        this.debugMsg(`rename -> ${fromPath} ${toPath}`);
-        addTempListeners(this, 'rename', reject);
-        this.sftp.rename(fromPath, toPath, (err) => {
-          if (err) {
-            this.debugMsg(`rename error ${err.message} code: ${err.code}`);
-            reject(
-              fmtError(
-                `${err.message} From: ${fromPath} To: ${toPath}`,
-                'rename',
-                err.code
-              )
-            );
-          }
-          resolve(`Successfully renamed ${fromPath} to ${toPath}`);
-        });
-      }
-    }).finally((rsp) => {
-      removeTempListeners(this, 'rename');
-      this._resetEventFlags();
-      return rsp;
+      this.sftp.rename(fPath, tPath, (err) => {
+        if (err) {
+          reject(
+            this.fmtError(
+              `${err.message} From: ${fPath} To: ${tPath}`,
+              '_rename',
+              err.code
+            )
+          );
+        }
+        resolve(`Successfully renamed ${fPath} to ${tPath}`);
+      });
     });
+  }
+
+  async rename(fromPath, toPath) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'rename');
+      haveConnection(this, 'rename');
+      return await this._rename(fromPath, toPath);
+    } catch (err) {
+      throw err.custom
+        ? err
+        : this.fmtError(`${err.message} ${fromPath} ${toPath}`, 'rename', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'rename');
+    }
   }
 
   /**
@@ -6940,33 +8210,39 @@ class SftpClient {
    * @param {string} fromPath - path to the file to be renamed.
    * @param {string} toPath - path  the new name.
    *
-   * @return {Promise}
+   * @return {Promise<String>}
    *
    */
-  posixRename(fromPath, toPath) {
+  _posixRename(fPath, tPath) {
     return new Promise((resolve, reject) => {
-      if (haveConnection(this, 'posixRename', reject)) {
-        this.debugMsg(`posixRename -> ${fromPath} ${toPath}`);
-        addTempListeners(this, 'posixRename', reject);
-        this.sftp.ext_openssh_rename(fromPath, toPath, (err) => {
-          if (err) {
-            this.debugMsg(`posixRename error ${err.message} code: ${err.code}`);
-            reject(
-              fmtError(
-                `${err.message} From: ${fromPath} To: ${toPath}`,
-                'posixRename',
-                err.code
-              )
-            );
-          }
-          resolve(`Successful POSIX rename ${fromPath} to ${toPath}`);
-        });
-      }
-    }).finally((rsp) => {
-      removeTempListeners(this, 'posixRename');
-      this._resetEventFlags();
-      return rsp;
+      this.sftp.ext_openssh_rename(fPath, tPath, (err) => {
+        if (err) {
+          reject(
+            this.fmtError(
+              `${err.message} From: ${fPath} To: ${tPath}`,
+              '_posixRename',
+              err.code
+            )
+          );
+        }
+        resolve(`Successful POSIX rename ${fPath} to ${tPath}`);
+      });
     });
+  }
+
+  async posixRename(fromPath, toPath) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'posixRename');
+      haveConnection(this, 'posixRename');
+      return await this._posixRename(fromPath, toPath);
+    } catch (err) {
+      throw err.custom
+        ? err
+        : this.fmtError(`${err.message} ${fromPath} ${toPath}`, 'posixRename', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'posixRename');
+    }
   }
 
   /**
@@ -6977,23 +8253,32 @@ class SftpClient {
    * @param {string} remotePath - path to the remote target object.
    * @param {number | string} mode - the new octal mode to set
    *
-   * @return {Promise}
+   * @return {Promise<String>}
    */
-  chmod(remotePath, mode) {
+  _chmod(rPath, mode) {
     return new Promise((resolve, reject) => {
-      this.debugMsg(`chmod -> ${remotePath} ${mode}`);
-      addTempListeners(this, 'chmod', reject);
-      this.sftp.chmod(remotePath, mode, (err) => {
+      this.sftp.chmod(rPath, mode, (err) => {
         if (err) {
-          reject(fmtError(`${err.message} ${remotePath}`, 'chmod', err.code));
+          reject(this.fmtError(`${err.message} ${rPath}`, '_chmod', err.code));
         }
         resolve('Successfully change file mode');
       });
-    }).finally((rsp) => {
-      removeTempListeners(this, 'chmod');
-      this._resetEventFlags();
-      return rsp;
     });
+  }
+
+  async chmod(remotePath, mode) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'chmod');
+      haveConnection(this, 'chmod');
+      return await this._chmod(remotePath, mode);
+    } catch (err) {
+      throw err.custom
+        ? err
+        : this.fmtError(`${err.message} ${remotePath}`, 'chmod', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'chmod');
+    }
   }
 
   /**
@@ -7004,55 +8289,92 @@ class SftpClient {
    * server.
    * @param {String} srcDir - local source directory
    * @param {String} dstDir - remote destination directory
-   * @param {RegExp} filter - (Optional) a regular expression used to select
-   *                         files and directories to upload
-   * @returns {String}
-   * @throws {Error}
+   * @param {Object} options - (Optional) An object with 2 supported properties,
+   * 'filter' and 'useFastput'. The first argument is the full path of the item
+   * to be uploaded and the second argument is a boolean, which will be true if
+   * the target path is for a directory. If the function returns true, the item
+   * will be uploaded and excluded when it returns false. The 'useFastput' property is a
+   * boolean value. When true, the 'fastPut()' method will be used to upload files. Default
+   * is to use the slower, but more supported 'put()' method.
+   *
+   * @returns {Promise<String>}
    */
-  async uploadDir(srcDir, dstDir, filter = /.*/) {
+  async _uploadDir(srcDir, dstDir, options) {
     try {
-      this.debugMsg(`uploadDir -> ${srcDir} ${dstDir}`);
+      const absDstDir = await normalizeRemotePath(this, dstDir);
+      this.debugMsg(`uploadDir <- SRC = ${srcDir} DST = ${absDstDir}`);
       const srcType = localExists(srcDir);
-      if (srcType !== 'd') {
-        throw fmtError(
-          `Bad path: ${srcDir}: not a directory`,
-          'uploadDir',
+      if (!srcType) {
+        throw this.fmtError(
+          `Bad path: ${srcDir} not exist`,
+          '_uploadDir',
           errorCode.badPath
         );
       }
-      haveConnection(this, 'uploadDir');
-      let dstStatus = await this.exists(dstDir);
+      if (srcType !== 'd') {
+        throw this.fmtError(
+          `Bad path: ${srcDir}: not a directory`,
+          '_uploadDir',
+          errorCode.badPath
+        );
+      }
+      const dstStatus = await this.exists(absDstDir);
       if (dstStatus && dstStatus !== 'd') {
-        throw fmtError(`Bad path ${dstDir}`, 'uploadDir', errorCode.badPath);
+        throw this.fmtError(
+          `Bad path ${absDstDir} Not a directory`,
+          '_uploadDir',
+          errorCode.badPath
+        );
       }
       if (!dstStatus) {
-        await this.mkdir(dstDir, true);
+        await this._mkdir(absDstDir, true);
       }
       let dirEntries = fs.readdirSync(srcDir, {
         encoding: 'utf8',
         withFileTypes: true,
       });
-      dirEntries = dirEntries.filter((item) => filter.test(item.name));
-      for (let e of dirEntries) {
-        if (e.isDirectory()) {
-          let newSrc = join(srcDir, e.name);
-          let newDst = dstDir + this.remotePathSep + e.name;
-          await this.uploadDir(newSrc, newDst, filter);
-        } else if (e.isFile()) {
-          let src = join(srcDir, e.name);
-          let dst = dstDir + this.remotePathSep + e.name;
-          await this.fastPut(src, dst);
-          this.client.emit('upload', { source: src, destination: dst });
-        } else {
-          this.debugMsg(
-            `uploadDir: File ignored: ${e.name} not a regular file`
-          );
-        }
+      if (options?.filter) {
+        dirEntries = dirEntries.filter((item) =>
+          options.filter(join(srcDir, item.name), item.isDirectory())
+        );
       }
-      return `${srcDir} uploaded to ${dstDir}`;
+      let fileUploads = [];
+      for (const e of dirEntries) {
+        const newSrc = join(srcDir, e.name);
+        const newDst = `${absDstDir}${this.remotePathSep}${e.name}`;
+        if (e.isDirectory()) {
+          await this.uploadDir(newSrc, newDst, options);
+        } else if (e.isFile()) {
+          if (options?.useFastput) {
+            fileUploads.push(this._fastPut(newSrc, newDst));
+          } else {
+            fileUploads.push(this._put(newSrc, newDst));
+          }
+          this.client.emit('upload', { source: newSrc, destination: newDst });
+        } else {
+          this.debugMsg(`uploadDir: File ignored: ${e.name} not a regular file`);
+        }
+        await Promise.all(fileUploads);
+      }
+      return `${srcDir} uploaded to ${absDstDir}`;
     } catch (err) {
-      this._resetEventFlags();
-      throw err.custom ? err : fmtError(err, 'uploadDir');
+      throw err.custom
+        ? err
+        : this.fmtError(`${err.message} ${srcDir}`, '_uploadDir', err.code);
+    }
+  }
+
+  async uploadDir(srcDir, dstDir, options) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'uploadDir');
+      this.debugMsg(`uploadDir -> SRC = ${srcDir} DST = ${dstDir}`);
+      haveConnection(this, 'uploadDir');
+      return await this._uploadDir(srcDir, dstDir, options);
+    } catch (err) {
+      throw err.custom ? err : this.fmtError(err, 'uploadDir');
+    } finally {
+      removeTempListeners(this, listeners, 'chmod');
     }
   }
 
@@ -7064,19 +8386,29 @@ class SftpClient {
    * file system.
    * @param {String} srcDir - remote source directory
    * @param {String} dstDir - local destination directory
-   * @param {RegExp} filter - (Optional) a regular expression used to select
-   *                         files and directories to upload
-   * @returns {Promise}
-   * @throws {Error}
+   * @param {Object} options - (Optional) Object with 2 supported properties,
+   * 'filter' and 'useFastget'. The filter property is a function of two
+   * arguments. The first argument is the full path of the item to be downloaded
+   * and the second argument is a boolean, which will be true if the target path
+   * is for a directory. If the function returns true, the item will be
+   * downloaded and excluded if teh function returns false.
+   *
+   * @returns {Promise<String>}
    */
-  async downloadDir(srcDir, dstDir, filter = /.*/) {
+  async _downloadDir(srcDir, dstDir, options) {
     try {
-      this.debugMsg(`downloadDir -> ${srcDir} ${dstDir}`);
-      haveConnection(this, 'downloadDir');
-      let fileList = await this.list(srcDir, filter);
+      let fileList = await this._list(srcDir);
+      if (options?.filter) {
+        fileList = fileList.filter((item) =>
+          options.filter(
+            `${srcDir}${this.remotePathSep}${item.name}`,
+            item.type === 'd' ? true : false
+          )
+        );
+      }
       const localCheck = haveLocalCreate(dstDir);
       if (!localCheck.status && localCheck.details === 'permission denied') {
-        throw fmtError(
+        throw this.fmtError(
           `Bad path: ${dstDir}: ${localCheck.details}`,
           'downloadDir',
           localCheck.code
@@ -7084,63 +8416,197 @@ class SftpClient {
       } else if (localCheck.status && !localCheck.type) {
         fs.mkdirSync(dstDir, { recursive: true });
       } else if (localCheck.status && localCheck.type !== 'd') {
-        throw fmtError(
+        throw this.fmtError(
           `Bad path: ${dstDir}: not a directory`,
           'downloadDir',
           errorCode.badPath
         );
       }
-      for (let f of fileList) {
+      let downloadFiles = [];
+      for (const f of fileList) {
+        const newSrc = `${srcDir}${this.remotePathSep}${f.name}`;
+        const newDst = join(dstDir, f.name);
         if (f.type === 'd') {
-          let newSrc = srcDir + this.remotePathSep + f.name;
-          let newDst = join(dstDir, f.name);
-          await this.downloadDir(newSrc, newDst, filter);
+          await this._downloadDir(newSrc, newDst, options);
         } else if (f.type === '-') {
-          let src = srcDir + this.remotePathSep + f.name;
-          let dst = join(dstDir, f.name);
-          await this.fastGet(src, dst);
-          this.client.emit('download', { source: src, destination: dst });
+          if (options?.useFasget) {
+            downloadFiles.push(this._fastGet(newSrc, newDst));
+          } else {
+            downloadFiles.push(this._get(newSrc, newDst));
+          }
+          this.client.emit('download', { source: newSrc, destination: newDst });
         } else {
-          this.debugMsg(
-            `downloadDir: File ignored: ${f.name} not regular file`
-          );
+          this.debugMsg(`downloadDir: File ignored: ${f.name} not regular file`);
         }
       }
+      await Promise.all(downloadFiles);
       return `${srcDir} downloaded to ${dstDir}`;
     } catch (err) {
-      this._resetEventFlags();
-      throw err.custom ? err : fmtError(err, 'downloadDir', err.code);
+      throw err.custom
+        ? err
+        : this.fmtError(`${err.message} ${srcDir}`, '_downloadDir', err.code);
+    }
+  }
+
+  async downloadDir(srcDir, dstDir, options) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'downloadDir');
+      haveConnection(this, 'downloadDir');
+      return await this._downloadDir(srcDir, dstDir, options);
+    } catch (err) {
+      throw err.custom ? err : this.fmtError(err, 'downloadDir', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'downloadDir');
+    }
+  }
+
+  /**
+   *
+   * Returns a read stream object. This is a low level method which will return a read stream
+   * connected to the remote file object specified as an argument. Client code is fully responsible
+   * for managing this stream object i.e. adding any necessary listeners and disposing of the object etc.
+   * See the SSH2 sftp documentation for details on possible options which can be used.
+   *
+   * @param {String} remotePath - path to remote file to attach stream to
+   * @param {Object} options - options to pass to the create stream process
+   *
+   * @returns {Object} a read stream object
+   *
+   */
+  createReadStream(remotePath, options) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'createReadStream');
+      haveConnection(this, 'createReadStream');
+      const stream = this.sftp.createReadStream(remotePath, options);
+      return stream;
+    } catch (err) {
+      throw err.custom ? err : this.fmtError(err.message, 'createReadStream', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'createReadStreame');
+    }
+  }
+
+  /**
+   *
+   * Create a write stream object connected to a file on the remote sftp server.
+   * This is a low level method which will return a write stream for the remote file specified
+   * in the 'remotePath' argument. Client code to responsible for managing this object once created.
+   * This includes disposing of file handles, setting up any necessary event listeners etc.
+   *
+   * @param {String} remotePath - path to the remote file on the sftp server
+   * @param (Object} options - options to pass to the create write stream process)
+   *
+   * @returns {Object} a stream object
+   *
+   */
+  createWriteStream(remotePath, options) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'createWriteStream');
+      haveConnection(this, 'createWriteStream');
+      const stream = this.sftp.createWriteStream(remotePath, options);
+      return stream;
+    } catch (err) {
+      throw err.custom ? err : this.fmtError(err.message, 'createWriteStream', err.code);
+    } finally {
+      removeTempListeners(this, listeners, 'createWriteStream');
     }
   }
 
   /**
    * @async
    *
-   * End the SFTP connection
+   * Make a remote copy of a remote file. Create a copy of a remote file on the remote
+   * server. It is assumed the directory where the copy will be placed already exists.
+   * The destination file must not already exist.
+   *
+   * @param {String} srcPath - path to the remote file to be copied
+   * @param {String} dstPath - destination path for the copy.
+   *
+   * @returns {String}.
    *
    */
-  end() {
-    let endCloseHandler;
+  _rcopy(srcPath, dstPath) {
     return new Promise((resolve, reject) => {
+      const ws = this.sftp.createWriteStream(dstPath);
+      const rs = this.sftp.createReadStream(srcPath);
+      ws.on('error', (err) => {
+        reject(this.fmtError(`${err.message} ${dstPath}`, '_rcopy'));
+      });
+      rs.on('error', (err) => {
+        reject(this.fmtError(`${err.message} ${srcPath}`, '_rcopy'));
+      });
+      ws.on('close', () => {
+        resolve(`${srcPath} copied to ${dstPath}`);
+      });
+      rs.pipe(ws);
+    });
+  }
+
+  async rcopy(src, dst) {
+    let listeners;
+    try {
+      listeners = addTempListeners(this, 'rcopy');
+      haveConnection(this, 'rcopy');
+      const srcPath = await normalizeRemotePath(this, src);
+      const srcExists = await this.exists(srcPath);
+      if (!srcExists) {
+        throw this.fmtError(
+          `Source does not exist ${srcPath}`,
+          'rcopy',
+          errorCode.badPath
+        );
+      }
+      if (srcExists !== '-') {
+        throw this.fmtError(`Source not a file ${srcPath}`, 'rcopy', errorCode.badPath);
+      }
+      const dstPath = await normalizeRemotePath(this, dst);
+      const dstExists = await this.exists(dstPath);
+      if (dstExists) {
+        throw this.fmtError(
+          `Destination already exists ${dstPath}`,
+          'rcopy',
+          errorCode.badPath
+        );
+      }
+      return this._rcopy(srcPath, dstPath);
+    } catch (err) {
+      throw err.custom ? err : this.fmtError(err, 'rcopy');
+    } finally {
+      removeTempListeners(this, listeners, 'rcopy');
+    }
+  }
+  /**
+   * @async
+   *
+   * End the SFTP connection
+   *
+   * @returns {Promise<Boolean>}
+   */
+  end() {
+    let endCloseHandler, listeners;
+    return new Promise((resolve, reject) => {
+      listeners = addTempListeners(this, 'end', reject);
       this.endCalled = true;
-      addTempListeners(this, 'end', reject);
       endCloseHandler = () => {
         this.sftp = undefined;
         this.debugMsg('end: Connection closed');
         resolve(true);
       };
       this.on('close', endCloseHandler);
-      if (haveConnection(this, 'end', reject)) {
-        this.debugMsg('end: Have connection - calling end()');
+      if (this.client) {
         this.client.end();
+      } else {
+        // no actual connection exists - just resolve
+        this.debugMsg('end: Called when no connection active');
+        resolve(true);
       }
-    }).finally((resp) => {
-      this.debugMsg('end: finally clause fired');
-      removeTempListeners(this, 'end');
+    }).finally(() => {
+      removeTempListeners(this, listeners, 'end');
       this.removeListener('close', endCloseHandler);
       this.endCalled = false;
-      this._resetEventFlags();
-      return resp;
     });
   }
 }
@@ -7150,71 +8616,12 @@ module.exports = SftpClient;
 
 /***/ }),
 
-/***/ 8481:
+/***/ 9432:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-"use strict";
-
-
-const fs = __nccwpck_require__(5747);
-const path = __nccwpck_require__(5622);
-
-const { errorCode } = __nccwpck_require__(1853);
-
-/**
- * Generate a new Error object with a reformatted error message which
- * is a little more informative and useful to users.
- *
- * @param {Error|string} err - The Error object the new error will be based on
- * @param {number} retryCount - For those functions which use retry. Number of
- *                              attempts to complete before giving up
- * @returns {Error} New error with custom error message
- */
-function fmtError(err, name = 'sftp', eCode, retryCount) {
-  let msg = '';
-  let code = '';
-  let retry = retryCount
-    ? ` after ${retryCount} ${retryCount > 1 ? 'attempts' : 'attempt'}`
-    : '';
-
-  if (err === undefined) {
-    msg = `${name}: Undefined error - probably a bug!`;
-    code = errorCode.generic;
-  } else if (typeof err === 'string') {
-    msg = `${name}: ${err}${retry}`;
-    code = eCode ? eCode : errorCode.generic;
-  } else if (err.custom) {
-    msg = `${name}->${err.message}${retry}`;
-    code = err.code;
-  } else {
-    switch (err.code) {
-      case 'ENOTFOUND':
-        msg =
-          `${name}: ${err.level} error. ` +
-          `Address lookup failed for host ${err.hostname}${retry}`;
-        break;
-      case 'ECONNREFUSED':
-        msg =
-          `${name}: ${err.level} error. Remote host at ` +
-          `${err.address} refused connection${retry}`;
-        break;
-      case 'ECONNRESET':
-        msg =
-          `${name}: Remote host has reset the connection: ` +
-          `${err.message}${retry}`;
-        break;
-      default:
-        msg = `${name}: ${err.message}${retry}`;
-    }
-    code = err.code ? err.code : errorCode.generic;
-  }
-  let newError = new Error(msg);
-  newError.code = code;
-  newError.custom = true;
-  return newError;
-}
-
-let tempListeners = [];
+const fs = __nccwpck_require__(7147);
+const path = __nccwpck_require__(1017);
+const { errorCode } = __nccwpck_require__(3232);
 
 /**
  * Simple default error listener. Will reformat the error message and
@@ -7224,80 +8631,94 @@ let tempListeners = [];
  * @throws {Error} Throws new error
  */
 function errorListener(client, name, reject) {
-  let fn = (err) => {
+  const fn = (err) => {
     if (client.endCalled || client.errorHandled) {
-      client.debugMsg(`${name}: Ignoring handled error: ${err.message}`);
+      // error already handled or expected - ignore
+      client.debugMsg(`${name} errorListener - ignoring handled error`);
+      return;
+    }
+    client.errorHandled = true;
+    const newError = new Error(`${name}: ${err.message}`);
+    newError.code = err.code;
+    if (reject) {
+      reject(newError);
     } else {
-      client.debugMsg(`${name}: Handling error: ${err.message}`);
-      client.errorHandled = true;
-      if (reject) {
-        client.debugMsg(`${name}: handled error with reject`);
-        reject(fmtError(err, name, err.code));
-      } else {
-        client.debugMsg(`${name}: handling error with throw`);
-        throw fmtError(err, name, err.code);
-      }
+      throw newError;
     }
   };
-  tempListeners.push(['error', fn]);
   return fn;
 }
 
 function endListener(client, name, reject) {
-  let fn = function () {
-    if (client.endCalled || client.endHandled) {
-      client.debugMsg(`${name}: Ignoring expected end event`);
-    } else {
-      client.debugMsg(`${name}: Handling end event`);
-      client.sftp = undefined;
-      client.endHandled = true;
-      if (reject) {
-        client.debugMsg(`${name}: handling end event with reject'`);
-        reject(fmtError('Unexpected end event raised', name));
-      } else {
-        client.debugMsg(`${name}: handling end event with throw`);
-        throw fmtError('Unexpected end event raised', name);
-      }
+  const fn = function () {
+    client.sftp = undefined;
+    if (client.endCalled || client.endHandled || client.errorHandled) {
+      // end event already handled - ignore
+      client.debugMsg(`${name} endListener - ignoring handled error`);
+      return;
     }
+    client.endHandled = true;
+    client.debugMsg(`${name} Unexpected end event - ignoring`);
+    // Don't reject/throw error, just log it and move on
+    // after invalidating the connection
+    // const err = new Error(`${name} Unexpected end event raised`);
+    // if (reject) {
+    //   reject(err);
+    // } else {
+    //   throw err;
+    // }
   };
-  tempListeners.push(['end', fn]);
   return fn;
 }
 
 function closeListener(client, name, reject) {
-  let fn = function () {
-    if (client.endCalled || client.closeHandled) {
-      client.debugMsg(`${name}: ignoring expected close event`);
-    } else {
-      client.debugMsg(`${name}: handling unexpected close event`);
-      client.sftp = undefined;
-      client.closeHandled = true;
-      if (reject) {
-        client.debugMsg(`${name}: handling close event with reject`);
-        reject(fmtError('Unexpected close event raised', name));
-      } else {
-        client.debugMsg(`${name}: handling close event with throw`);
-        throw fmtError('Unexpected close event raised', name);
-      }
+  const fn = function () {
+    client.sftp = undefined;
+    if (
+      client.endCalled ||
+      client.closeHandled ||
+      client.errorHandled ||
+      client.endHandled
+    ) {
+      // handled or expected close event - ignore
+      client.debugMsg(`${name} closeListener - ignoring handled error`);
+      return;
     }
+    client.closeHandled = true;
+    client.debugMsg(`${name} Unexpected close event raised - ignoring`);
+    // Don't throw/reject on close events. Just invalidate the connection
+    // and move on.
+    // const err = new Error(`${name}: Unexpected close event raised`);
+    // if (reject) {
+    //   reject(err);
+    // } else {
+    //   throw err;
+    // }
   };
-  tempListeners.push(['close', fn]);
   return fn;
 }
 
-function addTempListeners(obj, name, reject) {
-  obj.debugMsg(`${name}: Adding temp event listeners`);
-  obj.client.prependListener('end', endListener(obj, name, reject));
-  obj.client.prependListener('close', closeListener(obj, name, reject));
-  obj.client.prependListener('error', errorListener(obj, name, reject));
+function addTempListeners(client, name, reject) {
+  const listeners = {
+    end: endListener(client, name, reject),
+    close: closeListener(client, name, reject),
+    error: errorListener(client, name, reject),
+  };
+  client.on('end', listeners.end);
+  client.on('close', listeners.close);
+  client.on('error', listeners.error);
+  client._resetEventFlags();
+  return listeners;
 }
 
-function removeTempListeners(obj, name) {
-  obj.debugMsg(`${name}: Removing temp event listeners`);
-  tempListeners.forEach(([e, fn]) => {
-    obj.client.removeListener(e, fn);
-  });
-  tempListeners = [];
+function removeTempListeners(client, listeners, name) {
+  try {
+    client.removeListener('end', listeners.end);
+    client.removeListener('close', listeners.close);
+    client.removeListener('error', listeners.error);
+  } catch (err) {
+    throw new Error(`${name}: Error removing temp listeners: ${err.message}`);
+  }
 }
 
 /**
@@ -7321,11 +8742,9 @@ function localExists(filePath) {
   } else if (stats.isFile()) {
     return '-';
   } else {
-    throw fmtError(
-      `Bad path: ${filePath}: target must be a file or directory`,
-      'localExists',
-      errorCode.badPath
-    );
+    const err = new Error(`Bad path: ${filePath}: target must be a file or directory`);
+    err.code = errorCode.badPath;
+    throw err;
   }
 }
 
@@ -7359,29 +8778,33 @@ function haveLocalAccess(filePath, mode = 'r') {
       code: 0,
     };
   } catch (err) {
-    if (err.errno === -2) {
-      return {
-        status: false,
-        type: null,
-        details: 'not exist',
-        code: -2,
-      };
-    } else if (err.errno === -13) {
-      const type = localExists(filePath);
-      return {
-        status: false,
-        type: type,
-        details: 'permission denied',
-        code: -13,
-      };
-    } else if (err.errno === -20) {
-      return {
-        status: false,
-        type: null,
-        details: 'parent not a directory',
-      };
-    } else {
-      throw err;
+    switch (err.errno) {
+      case -2:
+        return {
+          status: false,
+          type: null,
+          details: 'not exist',
+          code: -2,
+        };
+      case -13:
+        return {
+          status: false,
+          type: localExists(filePath),
+          details: 'permission denied',
+          code: -13,
+        };
+      case -20:
+        return {
+          status: false,
+          type: null,
+          details: 'parent not a directory',
+        };
+      default:
+        return {
+          status: false,
+          type: null,
+          details: err.message,
+        };
     }
   }
 }
@@ -7436,15 +8859,15 @@ function haveLocalCreate(filePath) {
 async function normalizeRemotePath(client, aPath) {
   try {
     if (aPath.startsWith('..')) {
-      let root = await client.realPath('..');
-      return root + client.remotePathSep + aPath.substring(3);
+      const root = await client.realPath('..');
+      return root + client.remotePathSep + aPath.slice(3);
     } else if (aPath.startsWith('.')) {
-      let root = await client.realPath('.');
-      return root + client.remotePathSep + aPath.substring(2);
+      const root = await client.realPath('.');
+      return root + client.remotePathSep + aPath.slice(2);
     }
     return aPath;
   } catch (err) {
-    throw fmtError(err, 'normalizeRemotePath');
+    throw new Error(`normalizeRemotePath: ${err.message}`);
   }
 }
 
@@ -7460,11 +8883,8 @@ async function normalizeRemotePath(client, aPath) {
  */
 function haveConnection(client, name, reject) {
   if (!client.sftp) {
-    let newError = fmtError(
-      'No SFTP connection available',
-      name,
-      errorCode.connect
-    );
+    const newError = new Error(`${name}: No SFTP connection available`);
+    newError.code = errorCode.connect;
     if (reject) {
       reject(newError);
       return false;
@@ -7488,7 +8908,6 @@ function sleep(ms) {
 }
 
 module.exports = {
-  fmtError,
   errorListener,
   endListener,
   closeListener,
@@ -7505,7 +8924,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6492:
+/***/ 3204:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -7515,12 +8934,12 @@ const {
   Duplex: DuplexStream,
   Readable: ReadableStream,
   Writable: WritableStream,
-} = __nccwpck_require__(2413);
+} = __nccwpck_require__(2781);
 
 const {
   CHANNEL_EXTENDED_DATATYPE: { STDERR },
-} = __nccwpck_require__(6157);
-const { bufferSlice } = __nccwpck_require__(514);
+} = __nccwpck_require__(6832);
+const { bufferSlice } = __nccwpck_require__(9475);
 
 const PACKET_SIZE = 32 * 1024;
 const MAX_WINDOW = 2 * 1024 * 1024;
@@ -7725,6 +9144,7 @@ class Channel extends DuplexStream {
   destroy() {
     this.end();
     this.close();
+    return this;
   }
 
   // Session type-specific methods =============================================
@@ -7807,26 +9227,26 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1690:
+/***/ 9054:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { Socket } = __nccwpck_require__(1631);
-const { Duplex } = __nccwpck_require__(2413);
-const { resolve } = __nccwpck_require__(5622);
-const { readFile } = __nccwpck_require__(5747);
-const { execFile, spawn } = __nccwpck_require__(3129);
+const { Socket } = __nccwpck_require__(1808);
+const { Duplex } = __nccwpck_require__(2781);
+const { resolve } = __nccwpck_require__(1017);
+const { readFile } = __nccwpck_require__(7147);
+const { execFile, spawn } = __nccwpck_require__(2081);
 
-const { isParsedKey, parseKey } = __nccwpck_require__(534);
+const { isParsedKey, parseKey } = __nccwpck_require__(2218);
 
 const {
   makeBufferParser,
   readUInt32BE,
   writeUInt32BE,
   writeUInt32LE,
-} = __nccwpck_require__(514);
+} = __nccwpck_require__(9475);
 
 function once(cb) {
   let called = false;
@@ -8938,7 +10358,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4442:
+/***/ 6063:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -8952,10 +10372,10 @@ const {
   createHash,
   getHashes,
   randomFillSync,
-} = __nccwpck_require__(6417);
-const { Socket } = __nccwpck_require__(1631);
-const { lookup: dnsLookup } = __nccwpck_require__(881);
-const EventEmitter = __nccwpck_require__(8614);
+} = __nccwpck_require__(6113);
+const { Socket } = __nccwpck_require__(1808);
+const { lookup: dnsLookup } = __nccwpck_require__(9523);
+const EventEmitter = __nccwpck_require__(2361);
 const HASHES = getHashes();
 
 const {
@@ -8974,11 +10394,11 @@ const {
   SUPPORTED_KEX,
   SUPPORTED_MAC,
   SUPPORTED_SERVER_HOST_KEY,
-} = __nccwpck_require__(6157);
-const { init: cryptoInit } = __nccwpck_require__(3214);
-const Protocol = __nccwpck_require__(5203);
-const { parseKey } = __nccwpck_require__(534);
-const { SFTP } = __nccwpck_require__(8299);
+} = __nccwpck_require__(6832);
+const { init: cryptoInit } = __nccwpck_require__(5708);
+const Protocol = __nccwpck_require__(9031);
+const { parseKey } = __nccwpck_require__(2218);
+const { SFTP } = __nccwpck_require__(2026);
 const {
   bufferCopy,
   makeBufferParser,
@@ -8986,23 +10406,23 @@ const {
   readUInt32BE,
   sigSSHToASN1,
   writeUInt32BE,
-} = __nccwpck_require__(514);
+} = __nccwpck_require__(9475);
 
-const { AgentContext, createAgent, isAgent } = __nccwpck_require__(1690);
+const { AgentContext, createAgent, isAgent } = __nccwpck_require__(9054);
 const {
   Channel,
   MAX_WINDOW,
   PACKET_SIZE,
   windowAdjust,
   WINDOW_THRESHOLD,
-} = __nccwpck_require__(6492);
+} = __nccwpck_require__(3204);
 const {
   ChannelManager,
   generateAlgorithmList,
   isWritable,
   onChannelOpenFailure,
   onCHANNEL_CLOSE,
-} = __nccwpck_require__(2620);
+} = __nccwpck_require__(834);
 
 const bufferParser = makeBufferParser();
 const sigParser = makeBufferParser();
@@ -10960,15 +12380,15 @@ module.exports = Client;
 
 /***/ }),
 
-/***/ 2641:
+/***/ 2994:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { Agent: HttpAgent } = __nccwpck_require__(8605);
-const { Agent: HttpsAgent } = __nccwpck_require__(7211);
-const { connect: tlsConnect } = __nccwpck_require__(4016);
+const { Agent: HttpAgent } = __nccwpck_require__(3685);
+const { Agent: HttpsAgent } = __nccwpck_require__(5687);
+const { connect: tlsConnect } = __nccwpck_require__(4404);
 
 let Client;
 
@@ -10988,7 +12408,7 @@ for (const ctor of [HttpAgent, HttpsAgent]) {
       const dstPort = options.port;
 
       if (Client === undefined)
-        Client = __nccwpck_require__(4442);
+        Client = __nccwpck_require__(6063);
 
       const client = new Client();
       let triedForward = false;
@@ -11052,7 +12472,7 @@ function decorateStream(stream, ctor, options) {
 
 /***/ }),
 
-/***/ 3961:
+/***/ 5869:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -11065,30 +12485,30 @@ const {
   CygwinAgent,
   OpenSSHAgent,
   PageantAgent,
-} = __nccwpck_require__(1690);
+} = __nccwpck_require__(9054);
 const {
   SSHTTPAgent: HTTPAgent,
   SSHTTPSAgent: HTTPSAgent,
-} = __nccwpck_require__(2641);
-const { parseKey } = __nccwpck_require__(534);
+} = __nccwpck_require__(2994);
+const { parseKey } = __nccwpck_require__(2218);
 const {
   flagsToString,
   OPEN_MODE,
   STATUS_CODE,
   stringToFlags,
-} = __nccwpck_require__(8299);
+} = __nccwpck_require__(2026);
 
 module.exports = {
   AgentProtocol,
   BaseAgent,
   createAgent,
-  Client: __nccwpck_require__(4442),
+  Client: __nccwpck_require__(6063),
   CygwinAgent,
   HTTPAgent,
   HTTPSAgent,
   OpenSSHAgent,
   PageantAgent,
-  Server: __nccwpck_require__(7148),
+  Server: __nccwpck_require__(2986),
   utils: {
     parseKey,
     sftp: {
@@ -11103,7 +12523,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5203:
+/***/ 9031:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -11147,26 +12567,26 @@ module.exports = {
 
 
 
-const { inspect } = __nccwpck_require__(1669);
+const { inspect } = __nccwpck_require__(3837);
 
-const { bindingAvailable, NullCipher, NullDecipher } = __nccwpck_require__(3214);
+const { bindingAvailable, NullCipher, NullDecipher } = __nccwpck_require__(5708);
 const {
   COMPAT_CHECKS,
   DISCONNECT_REASON,
   MESSAGE,
   SIGNALS,
   TERMINAL_MODE,
-} = __nccwpck_require__(6157);
+} = __nccwpck_require__(6832);
 const {
   DEFAULT_KEXINIT,
   KexInit,
   kexinit,
   onKEXPayload,
-} = __nccwpck_require__(4359);
+} = __nccwpck_require__(4126);
 const {
   parseKey,
-} = __nccwpck_require__(534);
-const MESSAGE_HANDLERS = __nccwpck_require__(6023);
+} = __nccwpck_require__(2218);
+const MESSAGE_HANDLERS = __nccwpck_require__(172);
 const {
   bufferCopy,
   bufferFill,
@@ -11174,15 +12594,15 @@ const {
   convertSignature,
   sendPacket,
   writeUInt32BE,
-} = __nccwpck_require__(514);
+} = __nccwpck_require__(9475);
 const {
   PacketReader,
   PacketWriter,
   ZlibPacketReader,
   ZlibPacketWriter,
-} = __nccwpck_require__(4556);
+} = __nccwpck_require__(6715);
 
-const MODULE_VER = __nccwpck_require__(6447)/* .version */ .i8;
+const MODULE_VER = (__nccwpck_require__(6674)/* .version */ .i8);
 
 const VALID_DISCONNECT_REASONS = new Map(
   Object.values(DISCONNECT_REASON).map((n) => [n, 1])
@@ -13188,20 +14608,20 @@ module.exports = Protocol;
 
 /***/ }),
 
-/***/ 8299:
+/***/ 2026:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const EventEmitter = __nccwpck_require__(8614);
-const fs = __nccwpck_require__(5747);
+const EventEmitter = __nccwpck_require__(2361);
+const fs = __nccwpck_require__(7147);
 const { constants } = fs;
 const {
   Readable: ReadableStream,
   Writable: WritableStream
-} = __nccwpck_require__(2413);
-const { inherits, isDate } = __nccwpck_require__(1669);
+} = __nccwpck_require__(2781);
+const { inherits, isDate } = __nccwpck_require__(3837);
 
 const FastBuffer = Buffer[Symbol.species];
 
@@ -13210,7 +14630,7 @@ const {
   bufferSlice,
   makeBufferParser,
   writeUInt32BE,
-} = __nccwpck_require__(514);
+} = __nccwpck_require__(9475);
 
 const ATTR = {
   SIZE: 0x00000001,
@@ -14790,6 +16210,91 @@ class SFTP extends EventEmitter {
       this._debug(`SFTP: Outbound: ${status} expand-path@openssh.com`);
     }
   }
+  ext_copy_data(srcHandle, srcOffset, len, dstHandle, dstOffset, cb) {
+    if (this.server)
+      throw new Error('Client-only method called in server mode');
+
+    const ext = this._extensions['copy-data'];
+    if (ext !== '1')
+      throw new Error('Server does not support this extended request');
+
+    if (!Buffer.isBuffer(srcHandle))
+      throw new Error('Source handle is not a Buffer');
+
+    if (!Buffer.isBuffer(dstHandle))
+      throw new Error('Destination handle is not a Buffer');
+
+    /*
+      uint32    id
+      string    "copy-data"
+      string    read-from-handle
+      uint64    read-from-offset
+      uint64    read-data-length
+      string    write-to-handle
+      uint64    write-to-offset
+    */
+    let p = 0;
+    const buf = Buffer.allocUnsafe(
+      4 + 1
+      + 4
+      + 4 + 9
+      + 4 + srcHandle.length
+      + 8
+      + 8
+      + 4 + dstHandle.length
+      + 8
+    );
+
+    writeUInt32BE(buf, buf.length - 4, p);
+    p += 4;
+
+    buf[p] = REQUEST.EXTENDED;
+    ++p;
+
+    const reqid = this._writeReqid = (this._writeReqid + 1) & MAX_REQID;
+    writeUInt32BE(buf, reqid, p);
+    p += 4;
+
+    writeUInt32BE(buf, 9, p);
+    p += 4;
+    buf.utf8Write('copy-data', p, 9);
+    p += 9;
+
+    writeUInt32BE(buf, srcHandle.length, p);
+    p += 4;
+    buf.set(srcHandle, p);
+    p += srcHandle.length;
+
+    for (let i = 7; i >= 0; --i) {
+      buf[p + i] = srcOffset & 0xFF;
+      srcOffset /= 256;
+    }
+    p += 8;
+
+    for (let i = 7; i >= 0; --i) {
+      buf[p + i] = len & 0xFF;
+      len /= 256;
+    }
+    p += 8;
+
+    writeUInt32BE(buf, dstHandle.length, p);
+    p += 4;
+    buf.set(dstHandle, p);
+    p += dstHandle.length;
+
+    for (let i = 7; i >= 0; --i) {
+      buf[p + i] = dstOffset & 0xFF;
+      dstOffset /= 256;
+    }
+
+    this._requests[reqid] = { cb };
+
+    const isBuffered = sendOrBuffer(this, buf);
+    if (this._debug) {
+      const status = (isBuffered ? 'Buffered' : 'Sending');
+      this._debug(`SFTP: Outbound: ${status} copy-data`);
+    }
+  }
   // ===========================================================================
   // Server-specific ===========================================================
   // ===========================================================================
@@ -15116,11 +16621,12 @@ function read_(self, handle, buf, off, len, position, cb, req_) {
         return;
       }
 
+      nb = (nb || 0);
       if (req.origOff === 0 && buf.length === req.nb)
         data = buf;
       else
-        data = bufferSlice(buf, req.origOff, req.origOff + req.nb);
-      cb(undefined, req.nb + (nb || 0), data, req.position);
+        data = bufferSlice(buf, req.origOff, req.origOff + req.nb + nb);
+      cb(undefined, req.nb + nb, data, req.position);
     },
     buffer: undefined,
   });
@@ -15610,7 +17116,8 @@ function tryWritePayload(sftp, payload) {
     return;
 
   if (outgoing.window === 0) {
-    sftp._waitWindow = true; // XXX: Unnecessary?
+    sftp._waitWindow = true;
+    sftp._chunkcb = drainBuffer;
     return payload;
   }
 
@@ -15787,14 +17294,13 @@ const CLIENT_HANDLERS = {
     */
     const errorCode = bufferParser.readUInt32BE();
     const errorMsg = bufferParser.readString(true);
-    const lang = bufferParser.skipString();
     bufferParser.clear();
 
-    if (lang === undefined) {
-      if (reqID !== undefined)
-        delete sftp._requests[reqID];
-      return doFatalSFTPError(sftp, 'Malformed STATUS packet');
-    }
+    // Note: we avoid checking that the error message and language tag are in
+    // the packet because there are some broken implementations that incorrectly
+    // omit them. The language tag in general was never really used amongst ssh
+    // implementations, so in the case of a missing error message we just
+    // default to something sensible.
 
     if (sftp._debug) {
       const jsonMsg = JSON.stringify(errorMsg);
@@ -16516,7 +18022,7 @@ const {
   ERR_INVALID_ARG_TYPE,
   ERR_OUT_OF_RANGE,
   validateNumber
-} = __nccwpck_require__(4712);
+} = __nccwpck_require__(7609);
 
 const kMinPoolSpace = 128;
 
@@ -16581,7 +18087,7 @@ function ReadStream(sftp, path, options) {
   this.autoClose = options.autoClose === undefined ? true : options.autoClose;
   this.pos = 0;
   this.bytesRead = 0;
-  this.closed = false;
+  this.isClosed = false;
 
   this.handle = options.handle === undefined ? null : options.handle;
   this.sftp = sftp;
@@ -16733,7 +18239,7 @@ function closeStream(stream, cb, err) {
   function onclose(er) {
     er = er || err;
     cb(er);
-    stream.closed = true;
+    stream.isClosed = true;
     if (!er)
       stream.emit('close');
   }
@@ -16776,7 +18282,7 @@ function WriteStream(sftp, path, options) {
   this.autoClose = options.autoClose === undefined ? true : options.autoClose;
   this.pos = 0;
   this.bytesWritten = 0;
-  this.closed = false;
+  this.isClosed = false;
 
   this.handle = options.handle === undefined ? null : options.handle;
   this.sftp = sftp;
@@ -16936,7 +18442,7 @@ if (typeof WritableStream.prototype.destroy !== 'function')
 WriteStream.prototype._destroy = ReadStream.prototype._destroy;
 WriteStream.prototype.close = function(cb) {
   if (cb) {
-    if (this.closed) {
+    if (this.isClosed) {
       process.nextTick(cb);
       return;
     }
@@ -16974,20 +18480,20 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6157:
+/***/ 6832:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const crypto = __nccwpck_require__(6417);
+const crypto = __nccwpck_require__(6113);
 
 let cpuInfo;
 try {
-  cpuInfo = __nccwpck_require__(398)();
+  cpuInfo = __nccwpck_require__(4137)();
 } catch {}
 
-const { bindingAvailable } = __nccwpck_require__(3214);
+const { bindingAvailable, CIPHER_INFO, MAC_INFO } = __nccwpck_require__(5708);
 
 const eddsaSupported = (() => {
   if (typeof crypto.sign === 'function'
@@ -17056,7 +18562,11 @@ const SUPPORTED_SERVER_HOST_KEY = DEFAULT_SERVER_HOST_KEY.concat([
 ]);
 
 
-const DEFAULT_CIPHER = [
+const canUseCipher = (() => {
+  const ciphers = crypto.getCiphers();
+  return (name) => ciphers.includes(CIPHER_INFO[name].sslName);
+})();
+let DEFAULT_CIPHER = [
   // http://tools.ietf.org/html/rfc5647
   'aes128-gcm@openssh.com',
   'aes256-gcm@openssh.com',
@@ -17079,12 +18589,15 @@ if (cpuInfo && cpuInfo.flags && !cpuInfo.flags.aes) {
 } else {
   DEFAULT_CIPHER.push('chacha20-poly1305@openssh.com');
 }
+DEFAULT_CIPHER = DEFAULT_CIPHER.filter(canUseCipher);
 const SUPPORTED_CIPHER = DEFAULT_CIPHER.concat([
   'aes256-cbc',
   'aes192-cbc',
   'aes128-cbc',
   'blowfish-cbc',
   '3des-cbc',
+  'aes128-gcm',
+  'aes256-gcm',
 
   // http://tools.ietf.org/html/rfc4345#section-4:
   'arcfour256',
@@ -17092,9 +18605,13 @@ const SUPPORTED_CIPHER = DEFAULT_CIPHER.concat([
 
   'cast128-cbc',
   'arcfour',
-]);
+].filter(canUseCipher));
 
 
+const canUseMAC = (() => {
+  const hashes = crypto.getHashes();
+  return (name) => hashes.includes(MAC_INFO[name].sslName);
+})();
 const DEFAULT_MAC = [
   'hmac-sha2-256-etm@openssh.com',
   'hmac-sha2-512-etm@openssh.com',
@@ -17102,7 +18619,7 @@ const DEFAULT_MAC = [
   'hmac-sha2-256',
   'hmac-sha2-512',
   'hmac-sha1',
-];
+].filter(canUseMAC);
 const SUPPORTED_MAC = DEFAULT_MAC.concat([
   'hmac-md5',
   'hmac-sha2-256-96', // first 96 bits of HMAC-SHA256
@@ -17110,7 +18627,7 @@ const SUPPORTED_MAC = DEFAULT_MAC.concat([
   'hmac-ripemd160',
   'hmac-sha1-96',     // first 96 bits of HMAC-SHA1
   'hmac-md5-96',      // first 96 bits of HMAC-MD5
-]);
+].filter(canUseMAC));
 
 const DEFAULT_COMPRESSION = [
   'none',
@@ -17324,7 +18841,7 @@ module.exports.DISCONNECT_REASON_BY_VALUE =
 
 /***/ }),
 
-/***/ 3214:
+/***/ 5708:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -17338,9 +18855,9 @@ module.exports.DISCONNECT_REASON_BY_VALUE =
 
 const {
   createCipheriv, createDecipheriv, createHmac, randomFillSync, timingSafeEqual
-} = __nccwpck_require__(6417);
+} = __nccwpck_require__(6113);
 
-const { readUInt32BE, writeUInt32BE } = __nccwpck_require__(514);
+const { readUInt32BE, writeUInt32BE } = __nccwpck_require__(9475);
 
 const FastBuffer = Buffer[Symbol.species];
 const MAX_SEQNO = 2 ** 32 - 1;
@@ -17357,7 +18874,7 @@ let AESGCMDecipher;
 let ChaChaPolyDecipher;
 let GenericDecipher;
 try {
-  binding = __nccwpck_require__(4582);
+  binding = __nccwpck_require__(9041);
   ({ AESGCMCipher, ChaChaPolyCipher, GenericCipher,
      AESGCMDecipher, ChaChaPolyDecipher, GenericDecipher } = binding);
 } catch {}
@@ -18911,7 +20428,7 @@ module.exports = {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
-        POLY1305_WASM_MODULE = await __nccwpck_require__(1267)();
+        POLY1305_WASM_MODULE = await __nccwpck_require__(4989)();
         POLY1305_RESULT_MALLOC = POLY1305_WASM_MODULE._malloc(16);
         poly1305_auth = POLY1305_WASM_MODULE.cwrap(
           'poly1305_auth',
@@ -18934,7 +20451,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1267:
+/***/ 4989:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
@@ -18947,7 +20464,7 @@ function(createPoly1305) {
 
 
 var b;b||(b=typeof createPoly1305 !== 'undefined' ? createPoly1305 : {});var q,r;b.ready=new Promise(function(a,c){q=a;r=c});var u={},w;for(w in b)b.hasOwnProperty(w)&&(u[w]=b[w]);var x="object"===typeof window,y="function"===typeof importScripts,z="object"===typeof process&&"object"===typeof process.versions&&"string"===typeof process.versions.node,B="",C,D,E,F,G;
-if(z)B=y?__nccwpck_require__(5622).dirname(B)+"/":__dirname+"/",C=function(a,c){var d=H(a);if(d)return c?d:d.toString();F||(F=__nccwpck_require__(5747));G||(G=__nccwpck_require__(5622));a=G.normalize(a);return F.readFileSync(a,c?null:"utf8")},E=function(a){a=C(a,!0);a.buffer||(a=new Uint8Array(a));assert(a.buffer);return a},D=function(a,c,d){var e=H(a);e&&c(e);F||(F=__nccwpck_require__(5747));G||(G=__nccwpck_require__(5622));a=G.normalize(a);F.readFile(a,function(f,l){f?d(f):c(l.buffer)})},1<process.argv.length&&process.argv[1].replace(/\\/g,"/"),process.argv.slice(2),
+if(z)B=y?(__nccwpck_require__(1017).dirname)(B)+"/":__dirname+"/",C=function(a,c){var d=H(a);if(d)return c?d:d.toString();F||(F=__nccwpck_require__(7147));G||(G=__nccwpck_require__(1017));a=G.normalize(a);return F.readFileSync(a,c?null:"utf8")},E=function(a){a=C(a,!0);a.buffer||(a=new Uint8Array(a));assert(a.buffer);return a},D=function(a,c,d){var e=H(a);e&&c(e);F||(F=__nccwpck_require__(7147));G||(G=__nccwpck_require__(1017));a=G.normalize(a);F.readFile(a,function(f,l){f?d(f):c(l.buffer)})},1<process.argv.length&&process.argv[1].replace(/\\/g,"/"),process.argv.slice(2),
 b.inspect=function(){return"[Emscripten Module object]"};else if(x||y)y?B=self.location.href:"undefined"!==typeof document&&document.currentScript&&(B=document.currentScript.src),_scriptDir&&(B=_scriptDir),0!==B.indexOf("blob:")?B=B.substr(0,B.lastIndexOf("/")+1):B="",C=function(a){try{var c=new XMLHttpRequest;c.open("GET",a,!1);c.send(null);return c.responseText}catch(f){if(a=H(a)){c=[];for(var d=0;d<a.length;d++){var e=a[d];255<e&&(ba&&assert(!1,"Character code "+e+" ("+String.fromCharCode(e)+")  at offset "+
 d+" not in 0x00-0xFF."),e&=255);c.push(String.fromCharCode(e))}return c.join("")}throw f;}},y&&(E=function(a){try{var c=new XMLHttpRequest;c.open("GET",a,!1);c.responseType="arraybuffer";c.send(null);return new Uint8Array(c.response)}catch(d){if(a=H(a))return a;throw d;}}),D=function(a,c,d){var e=new XMLHttpRequest;e.open("GET",a,!0);e.responseType="arraybuffer";e.onload=function(){if(200==e.status||0==e.status&&e.response)c(e.response);else{var f=H(a);f?c(f.buffer):d()}};e.onerror=d;e.send(null)};
 b.print||console.log.bind(console);var I=b.printErr||console.warn.bind(console);for(w in u)u.hasOwnProperty(w)&&(b[w]=u[w]);u=null;var J;b.wasmBinary&&(J=b.wasmBinary);var noExitRuntime=b.noExitRuntime||!0;"object"!==typeof WebAssembly&&K("no native wasm support detected");var L,M=!1;function assert(a,c){a||K("Assertion failed: "+c)}function N(a){var c=b["_"+a];assert(c,"Cannot call unknown function "+a+", make sure it is exported");return c}
@@ -18981,7 +20498,7 @@ else {}
 
 /***/ }),
 
-/***/ 6023:
+/***/ 172:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -18989,8 +20506,8 @@ else {}
 
 const MESSAGE_HANDLERS = new Array(256);
 [
-  __nccwpck_require__(4359).HANDLERS,
-  __nccwpck_require__(4409),
+  (__nccwpck_require__(4126).HANDLERS),
+  __nccwpck_require__(6475),
 ].forEach((handlers) => {
   // eslint-disable-next-line prefer-const
   for (let [type, handler] of Object.entries(handlers)) {
@@ -19005,7 +20522,7 @@ module.exports = MESSAGE_HANDLERS;
 
 /***/ }),
 
-/***/ 4409:
+/***/ 6475:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -19017,18 +20534,18 @@ const {
   doFatalError,
   sigSSHToASN1,
   writeUInt32BE,
-} = __nccwpck_require__(514);
+} = __nccwpck_require__(9475);
 
 const {
   CHANNEL_OPEN_FAILURE,
   COMPAT,
   MESSAGE,
   TERMINAL_MODE,
-} = __nccwpck_require__(6157);
+} = __nccwpck_require__(6832);
 
 const {
   parseKey,
-} = __nccwpck_require__(534);
+} = __nccwpck_require__(2218);
 
 const TERMINAL_MODE_BY_VALUE =
   Array.from(Object.entries(TERMINAL_MODE))
@@ -20227,7 +21744,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4359:
+/***/ 4126:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -20242,9 +21759,9 @@ const {
   diffieHellman,
   generateKeyPairSync,
   randomFillSync,
-} = __nccwpck_require__(6417);
+} = __nccwpck_require__(6113);
 
-const { Ber } = __nccwpck_require__(6316);
+const { Ber } = __nccwpck_require__(970);
 
 const {
   COMPAT,
@@ -20256,14 +21773,14 @@ const {
   DEFAULT_COMPRESSION,
   DISCONNECT_REASON,
   MESSAGE,
-} = __nccwpck_require__(6157);
+} = __nccwpck_require__(6832);
 const {
   CIPHER_INFO,
   createCipher,
   createDecipher,
   MAC_INFO,
-} = __nccwpck_require__(3214);
-const { parseDERKey } = __nccwpck_require__(534);
+} = __nccwpck_require__(5708);
+const { parseDERKey } = __nccwpck_require__(2218);
 const {
   bufferFill,
   bufferParser,
@@ -20272,13 +21789,13 @@ const {
   FastBuffer,
   sigSSHToASN1,
   writeUInt32BE,
-} = __nccwpck_require__(514);
+} = __nccwpck_require__(9475);
 const {
   PacketReader,
   PacketWriter,
   ZlibPacketReader,
   ZlibPacketWriter,
-} = __nccwpck_require__(4556);
+} = __nccwpck_require__(6715);
 
 let MESSAGE_HANDLERS;
 
@@ -21973,7 +23490,7 @@ function onKEXPayload(state, payload) {
     case MESSAGE.UNIMPLEMENTED:
     case MESSAGE.DEBUG:
       if (!MESSAGE_HANDLERS)
-        MESSAGE_HANDLERS = __nccwpck_require__(6023);
+        MESSAGE_HANDLERS = __nccwpck_require__(172);
       return MESSAGE_HANDLERS[type](this, payload);
     case MESSAGE.KEXINIT:
       if (!state.firstPacket) {
@@ -22066,7 +23583,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 534:
+/***/ 2218:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -22086,21 +23603,21 @@ const {
   getCiphers,
   sign: sign_,
   verify: verify_,
-} = __nccwpck_require__(6417);
+} = __nccwpck_require__(6113);
 const supportedOpenSSLCiphers = getCiphers();
 
-const { Ber } = __nccwpck_require__(6316);
-const bcrypt_pbkdf = __nccwpck_require__(8585).pbkdf;
+const { Ber } = __nccwpck_require__(970);
+const bcrypt_pbkdf = (__nccwpck_require__(5447).pbkdf);
 
-const { CIPHER_INFO } = __nccwpck_require__(3214);
-const { eddsaSupported, SUPPORTED_CIPHER } = __nccwpck_require__(6157);
+const { CIPHER_INFO } = __nccwpck_require__(5708);
+const { eddsaSupported, SUPPORTED_CIPHER } = __nccwpck_require__(6832);
 const {
   bufferSlice,
   makeBufferParser,
   readString,
   readUInt32BE,
   writeUInt32BE,
-} = __nccwpck_require__(514);
+} = __nccwpck_require__(9475);
 
 const SYM_HASH_ALGO = Symbol('Hash Algorithm');
 const SYM_PRIV_PEM = Symbol('Private key PEM');
@@ -22667,6 +24184,8 @@ OpenSSH_Private.prototype = BaseKey;
     } else {
       ret = [];
     }
+    if (ret instanceof Error)
+      return ret;
     // This will need to change if/when OpenSSH ever starts storing multiple
     // keys in their key files
     return ret[0];
@@ -23555,14 +25074,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4712:
+/***/ 7609:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const assert = __nccwpck_require__(2357);
-const { inspect } = __nccwpck_require__(1669);
+const assert = __nccwpck_require__(9491);
+const { inspect } = __nccwpck_require__(3837);
 
 // Only use this for integers! Decimal numbers do not work with this function.
 function addNumericalSeparator(val) {
@@ -23678,13 +25197,13 @@ exports.validateNumber = function validateNumber(value, name) {
 
 /***/ }),
 
-/***/ 514:
+/***/ 9475:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const Ber = __nccwpck_require__(6316).Ber;
+const Ber = (__nccwpck_require__(970).Ber);
 
 let DISCONNECT_REASON;
 
@@ -23855,7 +25374,7 @@ module.exports = {
   doFatalError: (protocol, msg, level, reason) => {
     let err;
     if (DISCONNECT_REASON === undefined)
-      ({ DISCONNECT_REASON } = __nccwpck_require__(514));
+      ({ DISCONNECT_REASON } = __nccwpck_require__(6832));
     if (msg instanceof Error) {
       // doFatalError(protocol, err[, reason])
       err = msg;
@@ -24042,13 +25561,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4556:
+/***/ 6715:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { kMaxLength } = __nccwpck_require__(4293);
+const { kMaxLength } = __nccwpck_require__(4300);
 const {
   createInflate,
   constants: {
@@ -24061,7 +25580,7 @@ const {
     Z_DEFAULT_WINDOWBITS,
     Z_PARTIAL_FLUSH,
   }
-} = __nccwpck_require__(8761);
+} = __nccwpck_require__(9796);
 const ZlibHandle = createInflate()._handle.constructor;
 
 function processCallback() {
@@ -24305,7 +25824,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7148:
+/***/ 2986:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -24316,8 +25835,8 @@ module.exports = {
 //     immediate connection status checking
 
 
-const { Server: netServer } = __nccwpck_require__(1631);
-const EventEmitter = __nccwpck_require__(8614);
+const { Server: netServer } = __nccwpck_require__(1808);
+const EventEmitter = __nccwpck_require__(2361);
 const { listenerCount } = EventEmitter;
 
 const {
@@ -24334,13 +25853,13 @@ const {
   SUPPORTED_KEX,
   SUPPORTED_MAC,
   SUPPORTED_SERVER_HOST_KEY,
-} = __nccwpck_require__(6157);
-const { init: cryptoInit } = __nccwpck_require__(3214);
-const { KexInit } = __nccwpck_require__(4359);
-const { parseKey } = __nccwpck_require__(534);
-const Protocol = __nccwpck_require__(5203);
-const { SFTP } = __nccwpck_require__(8299);
-const { writeUInt32BE } = __nccwpck_require__(514);
+} = __nccwpck_require__(6832);
+const { init: cryptoInit } = __nccwpck_require__(5708);
+const { KexInit } = __nccwpck_require__(4126);
+const { parseKey } = __nccwpck_require__(2218);
+const Protocol = __nccwpck_require__(9031);
+const { SFTP } = __nccwpck_require__(2026);
+const { writeUInt32BE } = __nccwpck_require__(9475);
 
 const {
   Channel,
@@ -24348,7 +25867,7 @@ const {
   PACKET_SIZE,
   windowAdjust,
   WINDOW_THRESHOLD,
-} = __nccwpck_require__(6492);
+} = __nccwpck_require__(3204);
 
 const {
   ChannelManager,
@@ -24356,7 +25875,7 @@ const {
   isWritable,
   onChannelOpenFailure,
   onCHANNEL_CLOSE,
-} = __nccwpck_require__(2620);
+} = __nccwpck_require__(834);
 
 const MAX_PENDING_AUTHS = 10;
 
@@ -25680,13 +27199,13 @@ module.exports.IncomingClient = Client;
 
 /***/ }),
 
-/***/ 2620:
+/***/ 834:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { SFTP } = __nccwpck_require__(8299);
+const { SFTP } = __nccwpck_require__(2026);
 
 const MAX_CHANNEL = 2 ** 32 - 1;
 
@@ -26024,7 +27543,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7734:
+/***/ 4841:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -26053,7 +27572,7 @@ module.exports = {
 
 /*<replacement>*/
 
-var Buffer = __nccwpck_require__(582).Buffer;
+var Buffer = (__nccwpck_require__(1867).Buffer);
 /*</replacement>*/
 
 var isEncoding = Buffer.isEncoding || function (encoding) {
@@ -26327,7 +27846,287 @@ function simpleEnd(buf) {
 
 /***/ }),
 
-/***/ 4245:
+/***/ 4294:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+module.exports = __nccwpck_require__(4219);
+
+
+/***/ }),
+
+/***/ 4219:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var net = __nccwpck_require__(1808);
+var tls = __nccwpck_require__(4404);
+var http = __nccwpck_require__(3685);
+var https = __nccwpck_require__(5687);
+var events = __nccwpck_require__(2361);
+var assert = __nccwpck_require__(9491);
+var util = __nccwpck_require__(3837);
+
+
+exports.httpOverHttp = httpOverHttp;
+exports.httpsOverHttp = httpsOverHttp;
+exports.httpOverHttps = httpOverHttps;
+exports.httpsOverHttps = httpsOverHttps;
+
+
+function httpOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  return agent;
+}
+
+function httpsOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+function httpOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  return agent;
+}
+
+function httpsOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+
+function TunnelingAgent(options) {
+  var self = this;
+  self.options = options || {};
+  self.proxyOptions = self.options.proxy || {};
+  self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
+  self.requests = [];
+  self.sockets = [];
+
+  self.on('free', function onFree(socket, host, port, localAddress) {
+    var options = toOptions(host, port, localAddress);
+    for (var i = 0, len = self.requests.length; i < len; ++i) {
+      var pending = self.requests[i];
+      if (pending.host === options.host && pending.port === options.port) {
+        // Detect the request to connect same origin server,
+        // reuse the connection.
+        self.requests.splice(i, 1);
+        pending.request.onSocket(socket);
+        return;
+      }
+    }
+    socket.destroy();
+    self.removeSocket(socket);
+  });
+}
+util.inherits(TunnelingAgent, events.EventEmitter);
+
+TunnelingAgent.prototype.addRequest = function addRequest(req, host, port, localAddress) {
+  var self = this;
+  var options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
+
+  if (self.sockets.length >= this.maxSockets) {
+    // We are over limit so we'll add it to the queue.
+    self.requests.push(options);
+    return;
+  }
+
+  // If we are under maxSockets create a new one.
+  self.createSocket(options, function(socket) {
+    socket.on('free', onFree);
+    socket.on('close', onCloseOrRemove);
+    socket.on('agentRemove', onCloseOrRemove);
+    req.onSocket(socket);
+
+    function onFree() {
+      self.emit('free', socket, options);
+    }
+
+    function onCloseOrRemove(err) {
+      self.removeSocket(socket);
+      socket.removeListener('free', onFree);
+      socket.removeListener('close', onCloseOrRemove);
+      socket.removeListener('agentRemove', onCloseOrRemove);
+    }
+  });
+};
+
+TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
+  var self = this;
+  var placeholder = {};
+  self.sockets.push(placeholder);
+
+  var connectOptions = mergeOptions({}, self.proxyOptions, {
+    method: 'CONNECT',
+    path: options.host + ':' + options.port,
+    agent: false,
+    headers: {
+      host: options.host + ':' + options.port
+    }
+  });
+  if (options.localAddress) {
+    connectOptions.localAddress = options.localAddress;
+  }
+  if (connectOptions.proxyAuth) {
+    connectOptions.headers = connectOptions.headers || {};
+    connectOptions.headers['Proxy-Authorization'] = 'Basic ' +
+        new Buffer(connectOptions.proxyAuth).toString('base64');
+  }
+
+  debug('making CONNECT request');
+  var connectReq = self.request(connectOptions);
+  connectReq.useChunkedEncodingByDefault = false; // for v0.6
+  connectReq.once('response', onResponse); // for v0.6
+  connectReq.once('upgrade', onUpgrade);   // for v0.6
+  connectReq.once('connect', onConnect);   // for v0.7 or later
+  connectReq.once('error', onError);
+  connectReq.end();
+
+  function onResponse(res) {
+    // Very hacky. This is necessary to avoid http-parser leaks.
+    res.upgrade = true;
+  }
+
+  function onUpgrade(res, socket, head) {
+    // Hacky.
+    process.nextTick(function() {
+      onConnect(res, socket, head);
+    });
+  }
+
+  function onConnect(res, socket, head) {
+    connectReq.removeAllListeners();
+    socket.removeAllListeners();
+
+    if (res.statusCode !== 200) {
+      debug('tunneling socket could not be established, statusCode=%d',
+        res.statusCode);
+      socket.destroy();
+      var error = new Error('tunneling socket could not be established, ' +
+        'statusCode=' + res.statusCode);
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    if (head.length > 0) {
+      debug('got illegal response body from proxy');
+      socket.destroy();
+      var error = new Error('got illegal response body from proxy');
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    debug('tunneling connection has established');
+    self.sockets[self.sockets.indexOf(placeholder)] = socket;
+    return cb(socket);
+  }
+
+  function onError(cause) {
+    connectReq.removeAllListeners();
+
+    debug('tunneling socket could not be established, cause=%s\n',
+          cause.message, cause.stack);
+    var error = new Error('tunneling socket could not be established, ' +
+                          'cause=' + cause.message);
+    error.code = 'ECONNRESET';
+    options.request.emit('error', error);
+    self.removeSocket(placeholder);
+  }
+};
+
+TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
+  var pos = this.sockets.indexOf(socket)
+  if (pos === -1) {
+    return;
+  }
+  this.sockets.splice(pos, 1);
+
+  var pending = this.requests.shift();
+  if (pending) {
+    // If we have pending requests and a socket gets closed a new one
+    // needs to be created to take over in the pool for the one that closed.
+    this.createSocket(pending, function(socket) {
+      pending.request.onSocket(socket);
+    });
+  }
+};
+
+function createSecureSocket(options, cb) {
+  var self = this;
+  TunnelingAgent.prototype.createSocket.call(self, options, function(socket) {
+    var hostHeader = options.request.getHeader('host');
+    var tlsOptions = mergeOptions({}, self.options, {
+      socket: socket,
+      servername: hostHeader ? hostHeader.replace(/:.*$/, '') : options.host
+    });
+
+    // 0 is dummy port for v0.6
+    var secureSocket = tls.connect(0, tlsOptions);
+    self.sockets[self.sockets.indexOf(socket)] = secureSocket;
+    cb(secureSocket);
+  });
+}
+
+
+function toOptions(host, port, localAddress) {
+  if (typeof host === 'string') { // since v0.10
+    return {
+      host: host,
+      port: port,
+      localAddress: localAddress
+    };
+  }
+  return host; // for v0.11 or later
+}
+
+function mergeOptions(target) {
+  for (var i = 1, len = arguments.length; i < len; ++i) {
+    var overrides = arguments[i];
+    if (typeof overrides === 'object') {
+      var keys = Object.keys(overrides);
+      for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
+        var k = keys[j];
+        if (overrides[k] !== undefined) {
+          target[k] = overrides[k];
+        }
+      }
+    }
+  }
+  return target;
+}
+
+
+var debug;
+if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
+  debug = function() {
+    var args = Array.prototype.slice.call(arguments);
+    if (typeof args[0] === 'string') {
+      args[0] = 'TUNNEL: ' + args[0];
+    } else {
+      args.unshift('TUNNEL:');
+    }
+    console.error.apply(console, args);
+  }
+} else {
+  debug = function() {};
+}
+exports.debug = debug; // for test
+
+
+/***/ }),
+
+/***/ 8729:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 (function(nacl) {
@@ -28706,7 +30505,7 @@ nacl.setPRNG = function(fn) {
     });
   } else if (true) {
     // Node.js.
-    crypto = __nccwpck_require__(6417);
+    crypto = __nccwpck_require__(6113);
     if (crypto && crypto.randomBytes) {
       nacl.setPRNG(function(x, n) {
         var i, v = crypto.randomBytes(n);
@@ -28722,7 +30521,7 @@ nacl.setPRNG = function(fn) {
 
 /***/ }),
 
-/***/ 3261:
+/***/ 5027:
 /***/ ((__unused_webpack_module, exports) => {
 
 var undefined = (void 0); // Paranoia
@@ -29359,7 +31158,7 @@ function packF32(v) { return packIEEE754(v, 8, 23); }
 
 /***/ }),
 
-/***/ 5362:
+/***/ 7127:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
@@ -29367,20 +31166,26 @@ function packF32(v) { return packIEEE754(v, 8, 23); }
  * For Node.js, simply re-export the core `util.deprecate` function.
  */
 
-module.exports = __nccwpck_require__(1669).deprecate;
+module.exports = __nccwpck_require__(3837).deprecate;
 
 
 /***/ }),
 
-/***/ 398:
-/***/ ((module) => {
+/***/ 4240:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = eval("require")("cpu-features");
-
+module.exports = require(__nccwpck_require__.ab + "build/Release/cpufeatures.node")
 
 /***/ }),
 
-/***/ 2357:
+/***/ 9041:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+module.exports = require(__nccwpck_require__.ab + "lib/protocol/crypto/build/Release/sshcrypto.node")
+
+/***/ }),
+
+/***/ 9491:
 /***/ ((module) => {
 
 "use strict";
@@ -29388,7 +31193,7 @@ module.exports = require("assert");
 
 /***/ }),
 
-/***/ 4293:
+/***/ 4300:
 /***/ ((module) => {
 
 "use strict";
@@ -29396,7 +31201,7 @@ module.exports = require("buffer");
 
 /***/ }),
 
-/***/ 3129:
+/***/ 2081:
 /***/ ((module) => {
 
 "use strict";
@@ -29404,7 +31209,7 @@ module.exports = require("child_process");
 
 /***/ }),
 
-/***/ 6417:
+/***/ 6113:
 /***/ ((module) => {
 
 "use strict";
@@ -29412,7 +31217,7 @@ module.exports = require("crypto");
 
 /***/ }),
 
-/***/ 881:
+/***/ 9523:
 /***/ ((module) => {
 
 "use strict";
@@ -29420,7 +31225,7 @@ module.exports = require("dns");
 
 /***/ }),
 
-/***/ 8614:
+/***/ 2361:
 /***/ ((module) => {
 
 "use strict";
@@ -29428,7 +31233,7 @@ module.exports = require("events");
 
 /***/ }),
 
-/***/ 5747:
+/***/ 7147:
 /***/ ((module) => {
 
 "use strict";
@@ -29436,7 +31241,7 @@ module.exports = require("fs");
 
 /***/ }),
 
-/***/ 8605:
+/***/ 3685:
 /***/ ((module) => {
 
 "use strict";
@@ -29444,7 +31249,7 @@ module.exports = require("http");
 
 /***/ }),
 
-/***/ 7211:
+/***/ 5687:
 /***/ ((module) => {
 
 "use strict";
@@ -29452,7 +31257,7 @@ module.exports = require("https");
 
 /***/ }),
 
-/***/ 1631:
+/***/ 1808:
 /***/ ((module) => {
 
 "use strict";
@@ -29460,7 +31265,7 @@ module.exports = require("net");
 
 /***/ }),
 
-/***/ 2087:
+/***/ 2037:
 /***/ ((module) => {
 
 "use strict";
@@ -29468,7 +31273,7 @@ module.exports = require("os");
 
 /***/ }),
 
-/***/ 5622:
+/***/ 1017:
 /***/ ((module) => {
 
 "use strict";
@@ -29476,7 +31281,7 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ 2413:
+/***/ 2781:
 /***/ ((module) => {
 
 "use strict";
@@ -29484,7 +31289,7 @@ module.exports = require("stream");
 
 /***/ }),
 
-/***/ 4016:
+/***/ 4404:
 /***/ ((module) => {
 
 "use strict";
@@ -29492,7 +31297,7 @@ module.exports = require("tls");
 
 /***/ }),
 
-/***/ 1669:
+/***/ 3837:
 /***/ ((module) => {
 
 "use strict";
@@ -29500,11 +31305,19 @@ module.exports = require("util");
 
 /***/ }),
 
-/***/ 8761:
+/***/ 9796:
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("zlib");
+
+/***/ }),
+
+/***/ 6674:
+/***/ ((module) => {
+
+"use strict";
+module.exports = {"i8":"1.11.0"};
 
 /***/ })
 
@@ -29549,31 +31362,21 @@ module.exports = require("zlib");
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-const core = __nccwpck_require__(5127);
-const fs = __nccwpck_require__(5747);
-const path = __nccwpck_require__(5622);
+const core = __nccwpck_require__(2186);
+const fs = __nccwpck_require__(7147);
+const path = __nccwpck_require__(1017);
 
-let Client = __nccwpck_require__(9526);
+let Client = __nccwpck_require__(7551);
 let sftp = new Client();
 
 const host = core.getInput('host');
 const port = parseInt(core.getInput('port'));
 const username = core.getInput('username');
 const password = core.getInput('password');
-const agent = core.getInput('agent');
-const privateKeyIsFile = core.getInput('privateKeyIsFile');
-const passphrase = core.getInput('passphrase');
-
-var privateKey = core.getInput('privateKey');
 
 core.setSecret(password);
 if (passphrase != undefined) {
     core.setSecret(passphrase);
-}
-
-if (privateKeyIsFile == "true") {
-    var privateKey = fs.readFileSync(privateKey);
-    core.setSecret(privateKey);
 }
 
 const localPath = core.getInput('localPath');
@@ -29584,9 +31387,7 @@ sftp.connect({
     port: port,
     username: username,
     password: password,
-    agent: agent,
-    privateKey: privateKey,
-    passphrase: passphrase
+    readyTimeout: 99999  
 }).then(async () => {
     console.log("Connection established.");
     console.log("Current working directory: " + await sftp.cwd())

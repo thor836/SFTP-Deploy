@@ -7361,9 +7361,9 @@ class SftpClient {
         );
       }
       const retryOpts = {
-        retries: config.retries || 1,
-        factor: config.factor || 2,
-        minTimeout: config.retry_minTimeout || 25000,
+        retries: config.retries ?? 1,
+        factor: config.factor ?? 2,
+        minTimeout: config.retry_minTimeout ?? 25000,
       };
       await promiseRetry(retryOpts, async (retry, attempt) => {
         try {
@@ -8333,7 +8333,7 @@ class SftpClient {
         encoding: 'utf8',
         withFileTypes: true,
       });
-      if (options && options.filter) {
+      if (options?.filter) {
         dirEntries = dirEntries.filter((item) =>
           options.filter(join(srcDir, item.name), item.isDirectory())
         );
@@ -8345,7 +8345,7 @@ class SftpClient {
         if (e.isDirectory()) {
           await this.uploadDir(newSrc, newDst, options);
         } else if (e.isFile()) {
-          if (options && options.useFastput) {
+          if (options?.useFastput) {
             fileUploads.push(this._fastPut(newSrc, newDst));
           } else {
             fileUploads.push(this._put(newSrc, newDst));
@@ -8398,7 +8398,7 @@ class SftpClient {
   async _downloadDir(srcDir, dstDir, options) {
     try {
       let fileList = await this._list(srcDir);
-      if (options && options.filter) {
+      if (options?.filter) {
         fileList = fileList.filter((item) =>
           options.filter(
             `${srcDir}${this.remotePathSep}${item.name}`,
@@ -8429,7 +8429,7 @@ class SftpClient {
         if (f.type === 'd') {
           await this._downloadDir(newSrc, newDst, options);
         } else if (f.type === '-') {
-          if (options && options.useFasget) {
+          if (options?.useFasget) {
             downloadFiles.push(this._fastGet(newSrc, newDst));
           } else {
             downloadFiles.push(this._get(newSrc, newDst));
@@ -17545,7 +17545,7 @@ const CLIENT_HANDLERS = {
           default:
             // Unknown extended request
             sftp._debug && sftp._debug(
-              `SFTP: Inbound: Received EXTENDED_REPLY (id:${reqID}, ||?)`
+              `SFTP: Inbound: Received EXTENDED_REPLY (id:${reqID}, ???)`
             );
             bufferParser.clear();
             if (typeof req.cb === 'function')
@@ -17554,7 +17554,7 @@ const CLIENT_HANDLERS = {
         }
       } else {
         sftp._debug && sftp._debug(
-          `SFTP: Inbound: Received EXTENDED_REPLY (id:${reqID}, ||?)`
+          `SFTP: Inbound: Received EXTENDED_REPLY (id:${reqID}, ???)`
         );
         bufferParser.clear();
         return;

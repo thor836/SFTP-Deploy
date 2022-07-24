@@ -35,7 +35,8 @@ sftp.connect({
     password: password,
     agent: agent,
     privateKey: privateKey,
-    passphrase: passphrase
+    passphrase: passphrase,
+    readyTimeout: 99999  
 }).then(async () => {
     console.log("Connection established.");
     console.log("Current working directory: " + await sftp.cwd())

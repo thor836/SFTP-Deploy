@@ -11,9 +11,6 @@ const username = core.getInput('username');
 const password = core.getInput('password');
 
 core.setSecret(password);
-if (passphrase != undefined) {
-    core.setSecret(passphrase);
-}
 
 const localPath = core.getInput('localPath');
 const remotePath = core.getInput('remotePath');

@@ -21,7 +21,8 @@ sftp.connect({
     username: username,
     password: password,
     authHandler: 'password',
-    debug: console.log
+    debug: console.log,
+    agent: 'pageant'
 }).then(async () => {
     console.log("Connection established.");
     console.log("Current working directory: " + await sftp.cwd())

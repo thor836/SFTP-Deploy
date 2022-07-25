@@ -20,7 +20,8 @@ sftp.connect({
     port: port,
     username: username,
     password: password,
-    readyTimeout: 99999  
+    authHandler: 'password',
+    debug: console.log
 }).then(async () => {
     console.log("Connection established.");
     console.log("Current working directory: " + await sftp.cwd())

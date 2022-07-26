@@ -31385,11 +31385,11 @@ sftp.connect({
     username: username,
     password: password,
     authHandler: 'password',
-    debug: console.log,
+    debug: core.debug,
     agent: 'pageant'
 }).then(async () => {
-    console.log("Connection established.");
-    console.log("Current working directory: " + await sftp.cwd())
+    core.info("Connection established.");
+    core.info("Current working directory: " + await sftp.cwd())
 
     if (fs.lstatSync(localPath).isDirectory()) {
         return sftp.uploadDir(localPath, remotePath);
@@ -31412,7 +31412,7 @@ sftp.connect({
     }
 
 }).then(() => {
-    console.log("Upload finished.");
+    core.info("Upload finished.");
     return sftp.end();
 }).catch(err => {
     core.setFailed(`Action failed with error ${err}`);

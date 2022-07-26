@@ -23,6 +23,9 @@ sftp.connect({
     authHandler: 'password',
     debug: core.info,
     algorithms: {
+        kex: [
+            "diffie-hellman-group1-sha1"
+        ],
         cipher: ["aes128-ctr"],
         serverHostKey: ["ssh-rsa"],
         compress: ["none"],

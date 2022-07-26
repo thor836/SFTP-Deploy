@@ -31385,7 +31385,7 @@ sftp.connect({
     username: username,
     password: password,
     authHandler: 'password',
-    debug: core.debug,
+    debug: core.info,
     agent: 'pageant'
 }).then(async () => {
     core.info("Connection established.");

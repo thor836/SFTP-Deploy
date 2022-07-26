@@ -31386,7 +31386,11 @@ sftp.connect({
     password: password,
     authHandler: 'password',
     debug: core.info,
-    agent: 'pageant'
+    algorithms: {
+        cipher: ["aes128-ctr"],
+        serverHostKey: ["ssh-rsa"],
+        compress: ["none"],
+    }
 }).then(async () => {
     core.info("Connection established.");
     core.info("Current working directory: " + await sftp.cwd())
@@ -31400,7 +31404,7 @@ sftp.connect({
             await sftp.mkdir(directory, true);
             console.log("Created directories.");
         }
-        
+
         var modifiedPath = remotePath;
         if (await sftp.exists(remotePath)) {
             if ((await sftp.stat(remotePath)).isDirectory) {
